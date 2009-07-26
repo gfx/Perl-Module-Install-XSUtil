@@ -118,12 +118,11 @@ sub cc_append_to_libs{
 	my $mm = $self->makemaker_args;
 
 	my $libs = join q{ }, map{
-		my($file, $dir) = ref($_) eq 'ARRAY' ? @{$_} : ($_, undef);
-		$file =~ s/ \. \w+ \z //xms; # remove suffix
+		my($name, $dir) = ref($_) eq 'ARRAY' ? @{$_} : ($_, undef);
 
 		$dir = qq{-L$dir } if defined $dir;
-		_verbose "libs: $dir-l$file" if _VERBOSE;
-		$dir . qq{-l$file};
+		_verbose "libs: $dir-l$name" if _VERBOSE;
+		$dir . qq{-l$name};
 	} @libs;
 
 	if($mm->{LIBS}){
@@ -161,6 +160,7 @@ sub requires_xs{
 	$self->_xs_initialize();
 
 	my %added = $self->requires(@_);
+	my(@inc, @libs);
 
 	while(my $module = each %added){
 		my $dir = File::Spec->join(split /::/, $module);
@@ -168,32 +168,51 @@ sub requires_xs{
 		SCAN_INC: foreach my $inc_dir(@INC){
 			my $packlist = File::Spec->join($inc_dir, 'auto', $dir, '.packlist');
 			if(-e $packlist){
+				# read .packlist
 
-				my @files = do{
-					local *IN;
-					open IN, "< $packlist" or die("Cannot open '$packlist' for reading: $!\n");
-					map{ chomp; $_ } <IN>;
-				};
+				local *IN;
+				open IN, "< $packlist" or die("Cannot open '$packlist' for reading: $!\n");
 
-				if(my @header_files = grep{ / \.h \z/xmsi } @files){
-					$self->cc_append_to_inc(map{
-						my($vol, $dir, $file) = File::Spec->splitpath($_);
-						$dir;
-					} @header_files);
+				while(<IN>){
+					chomp;
+
+					if(/ \.h \z/xmsi){ # header files
+						my($volume, $dir, $basename) = File::Spec->splitpath($_);
+						push @inc, $dir;
+					}
+					elsif(/ \. (?: lib | dll | so) \z/xmsi){ # libraries
+						my($volume, $dir, $basename) = File::Spec->splitpath($_);
+						$basename =~ s/ \. \w+ \z //xms; # remove suffix
+						push @libs, [$basename, $dir];
+					}
 				}
 
-				if(my @lib_files = grep{ / \. (?: lib | dll ) \z/xmsio } @files){
-					$self->cc_append_to_libs(map{
-						my($vol, $dir, $file) = File::Spec->splitpath($_);
-						[$file, $dir]
-					} @lib_files);
-				}
-
+				close IN;
 
 				last SCAN_INC;
 			}
+			elsif($inc_dir =~ /\b blib \b/xmsi){
+				print "scanning $inc_dir\n";
+				foreach my $path( File::Spec->join($inc_dir, 'auto', $dir), File::Spec->join($inc_dir, $dir) ){
+					find(sub{
+						if(/ \.h \z/xmsi){ # header files
+							push @inc, $path;
+						}
+						elsif(/ \. (?: lib | dll | so ) \z/xmsi){ # libraries
+							(my $name = $_) =~ s/ \. \w+ \z //xms; # remove suffix
+							push @libs, [$name, $path];
+						}
+					}, $path);
+				}
+			}
 		}
 	}
+
+	my %uniq = ();
+	$self->cc_append_to_inc (grep{ !$uniq{ $_ }++ } @inc);
+
+	%uniq = ();
+	$self->cc_append_to_libs(grep{ !$uniq{ $_->[0] }++ } @libs);
 
 	return %added;
 }
@@ -278,6 +297,8 @@ sub install_headers{
 	my @not_found;
 	my $h_map = $self->{xsu_header_map} || {};
 
+	my $name = (split /(?:-|::)/, $self->module_name || $self->name)[-1];
+
 	while(my($ident, $path) = each %{$h_files}){
 		$path ||= $h_map->{$ident} || File::Spec->join('.', $ident);
 
@@ -286,7 +307,7 @@ sub install_headers{
 			next;
 		}
 
-		$ToInstall{$path} = File::Spec->join('$(INST_LIBDIR)', $path);
+		$ToInstall{$path} = File::Spec->join('$(INST_LIBDIR)', $name, $path);
 
 		$self->provides($ident => { file => $path });
 
@@ -351,6 +372,7 @@ sub _extract_functions_from_header_file{
 
 			next if $decl =~ /\b [0-9]+ \b/xmsi; # integer literals
 			next if $decl =~ / ["'] /xmsi;       # string/char literals
+			#"
 
 			push @functions, $name;
 
