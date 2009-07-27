@@ -2,11 +2,12 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
+
+use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
 
 use strict;
-use Module::Install::Base;
 
 use Config;
 
