@@ -16,6 +16,8 @@ test_requires 'XSLoader'          => 0.08;
 tests 't/*.t';
 author_tests 'xt';
 
+auto_set_repository;
+
 clean_files qw(
 		Module-Install-XSUtil-* *.stackdump
 		cover_db
