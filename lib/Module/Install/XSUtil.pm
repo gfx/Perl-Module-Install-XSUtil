@@ -310,7 +310,7 @@ sub install_headers{
 
 		$ToInstall{$path} = File::Spec->join('$(INST_LIBDIR)', $name, $path);
 
-		$self->provides($ident => { file => $path });
+		#$self->provides($ident => { file => $path });
 
 		_verbose "install: $ident ($path)" if _VERBOSE;
 		$self->_extract_functions_from_header_file($path);
