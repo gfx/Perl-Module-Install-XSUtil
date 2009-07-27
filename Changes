@@ -1,4 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.02 Mon Jul 27 13:59:29 2009
+	- no 'provides' section for header files
+	- add rpository info
+
 0.01 Sun Jul 26 09:52:01 2009
         - original version; created by Module::Setup
