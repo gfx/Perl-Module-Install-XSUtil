@@ -76,7 +76,7 @@ sub cc_warnings{
 	}
 	elsif($Config{cc} =~ /\A cl \b /xmsi){
 		# Microsoft Visual C++ Compiler
-		$self->cc_append_to_ccflags('-Wall');
+		$self->cc_append_to_ccflags('-W3');
 	}
 	else{
 		# TODO: support other compilers
@@ -148,7 +148,7 @@ sub cc_append_to_ccflags{
 		$mm->{CCFLAGS} .=  q{ } . $flags;
 	}
 	else{
-		$mm->{CCFLAGS}  = $flags;
+		$mm->{CCFLAGS}  = ($^O eq 'MSWin32' ? $Config{ccflags} . ' ' : '') . $flags;
 	}
 	return;
 }
@@ -393,6 +393,7 @@ sub cc_append_to_funclist{
 	my $mm = $self->makemaker_args;
 
 	push @{$mm->{FUNCLIST} ||= []}, @functions;
+	$mm->{DL_FUNCS} ||= { '$(NAME)' => ['boot_$(NAME)'] };
 
 	return;
 }
