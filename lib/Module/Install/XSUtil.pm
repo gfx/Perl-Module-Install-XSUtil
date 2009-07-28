@@ -17,6 +17,7 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %BuildRequires = (
+	'Devel::PPPort'     => 3.19,
 	'ExtUtils::ParseXS' => 2.20,
 	'XSLoader'          => 0.08,
 );
@@ -57,7 +58,7 @@ sub use_ppport{
 		use Devel::PPPort;
 		Devel::PPPort::WriteFile(q{$filename});
 		1;
-	} or warn("Cannot write $filename: $@");
+	} or warn("Cannot create $filename: $@");
 
 	$self->clean_files($filename);
 	$self->cc_append_to_ccflags('-DUSE_PPPORT');

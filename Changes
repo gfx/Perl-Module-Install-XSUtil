@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.03 Tue Jul 28 12:05:42 2009
+	- May this work on Windows!
+
 0.02 Mon Jul 27 13:59:29 2009
 	- no 'provides' section for header files
 	- add rpository info
