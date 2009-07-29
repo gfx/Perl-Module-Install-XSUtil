@@ -440,7 +440,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.03.
+This document describes Module::Install::XSUtil version 0.04.
 
 =head1 SYNOPSIS
 
