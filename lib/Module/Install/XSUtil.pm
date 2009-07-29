@@ -60,10 +60,12 @@ sub use_ppport{
 		1;
 	} or warn("Cannot create $filename: $@");
 
-	$self->clean_files($filename);
-	$self->cc_append_to_ccflags('-DUSE_PPPORT');
-	$self->cc_append_to_inc('.');
-
+	
+	if(-e $filename){
+		$self->clean_files($filename);
+		$self->cc_append_to_ccflags('-DUSE_PPPORT');
+		$self->cc_append_to_inc('.');
+	}
 	return;
 }
 
@@ -143,14 +145,9 @@ sub cc_append_to_ccflags{
 	$self->_xs_initialize();
 
 	my $mm    = $self->makemaker_args;
-	my $flags = join q{ }, @ccflags;
-
-	if($mm->{CCFLAGS}){
-		$mm->{CCFLAGS} .=  q{ } . $flags;
-	}
-	else{
-		$mm->{CCFLAGS}  = ($^O eq 'MSWin32' ? $Config{ccflags} . ' ' : '') . $flags;
-	}
+	
+	$mm->{CCFLAGS} ||= $Config{ccflags};
+	$mm->{CCFLAGS}  .= q{ } . join q{ }, @ccflags;
 	return;
 }
 
@@ -182,7 +179,7 @@ sub requires_xs{
 						my($volume, $dir, $basename) = File::Spec->splitpath($_);
 						push @inc, $dir;
 					}
-					elsif(/ \. (?: lib | dll | so) \z/xmsi){ # libraries
+					elsif(/ \. (?: lib | dll ) \z/xmsi){ # libraries
 						my($volume, $dir, $basename) = File::Spec->splitpath($_);
 						$basename =~ s/ \. \w+ \z //xms; # remove suffix
 						push @libs, [$basename, $dir];
