@@ -26,4 +26,4 @@ clean_files qw(
 		*.out
 );
 
-WriteAll;
+WriteAll check_nmake => 0;
