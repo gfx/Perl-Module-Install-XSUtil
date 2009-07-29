@@ -35,9 +35,14 @@ ok exists $h_files{'foo.h'}, 'foo.h exists';
 ok exists $h_files{'bar.h'}, 'bar.h exists';
 ok exists $h_files{'baz.h'}, 'baz.h exists';
 
-like $h_files{'foo.h'}, qr{ include . foo\.h        }xmsi, 'foo.h is include/foo.h';
-like $h_files{'bar.h'}, qr{ include . foo . bar \.h }xmsi, 'bar.h is include/foo/bar.h';
-like $h_files{'baz.h'}, qr{ include . foo . baz \.h }xmsi, 'baz.h is include/foo/baz.h';
+sub f2rx{
+	my $f = quotemeta( File::Spec->join(@_) );
+	return qr/$f/xmsi;
+}
+
+like $h_files{'foo.h'}, f2rx(qw(Foo foo.h));
+like $h_files{'bar.h'}, f2rx(qw(Foo bar.h));
+like $h_files{'baz.h'}, f2rx(qw(Foo foo baz.h));
 
 ok scalar `$make realclean`, "$make realclean";
 is $?, 0, '... success';

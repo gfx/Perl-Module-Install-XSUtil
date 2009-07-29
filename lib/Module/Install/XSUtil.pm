@@ -162,27 +162,25 @@ sub requires_xs{
 	my(@inc, @libs);
 
 	while(my $module = each %added){
-		my $dir = File::Spec->join(split /::/, $module);
+		my $mod_basedir = File::Spec->join(split /::/, $module);
 
 		SCAN_INC: foreach my $inc_dir(@INC){
-			my $packlist = File::Spec->join($inc_dir, 'auto', $dir, '.packlist');
-			if(-e $packlist){
-				# read .packlist
+			my $packlist = File::Spec->join($inc_dir, 'auto', $mod_basedir, '.packlist');
+			
+			my $rx_header = qr{\A (.+ $mod_basedir) .+ \.h \z}xmsi;
+			my $rx_lib    = qr{\A (.+ $mod_basedir) .+ (\w+) \. (?: lib | dll | a) \z}xmsi;
 
+			if(-e $packlist){
 				local *IN;
 				open IN, "< $packlist" or die("Cannot open '$packlist' for reading: $!\n");
-
 				while(<IN>){
 					chomp;
 
-					if(/ \.h \z/xmsi){ # header files
-						my($volume, $dir, $basename) = File::Spec->splitpath($_);
-						push @inc, $dir;
+					if($_ =~ $rx_header){
+						push @inc, $1
 					}
-					elsif(/ \. (?: lib | dll ) \z/xmsi){ # libraries
-						my($volume, $dir, $basename) = File::Spec->splitpath($_);
-						$basename =~ s/ \. \w+ \z //xms; # remove suffix
-						push @libs, [$basename, $dir];
+					elsif($_ =~ $rx_lib){
+						push @libs, [$2, $1];
 					}
 				}
 
@@ -192,16 +190,19 @@ sub requires_xs{
 			}
 			elsif($inc_dir =~ /\b blib \b/xmsi){
 				print "scanning $inc_dir\n";
-				foreach my $path( File::Spec->join($inc_dir, 'auto', $dir), File::Spec->join($inc_dir, $dir) ){
-					find(sub{
-						if(/ \.h \z/xmsi){ # header files
-							push @inc, $path;
-						}
-						elsif(/ \. (?: lib | dll | so ) \z/xmsi){ # libraries
-							(my $name = $_) =~ s/ \. \w+ \z //xms; # remove suffix
-							push @libs, [$name, $path];
-						}
-					}, $path);
+				my $n_inc = scalar @inc;
+
+				find(sub{
+					if($File::Find::name =~ $rx_header){
+						push @inc, $1;
+					}
+					elsif($File::Find::name =~ $rx_lib){
+						push @libs, [$2, 1];
+					}
+				}, File::Spec->join($inc_dir, 'auto', $mod_basedir), File::Spec->join($inc_dir, $mod_basedir));
+
+				if($n_inc != scalar @inc){
+					last SCAN_INC;
 				}
 			}
 		}
@@ -296,8 +297,6 @@ sub install_headers{
 	my @not_found;
 	my $h_map = $self->{xsu_header_map} || {};
 
-	my $name = (split /(?:-|::)/, $self->module_name || $self->name)[-1];
-
 	while(my($ident, $path) = each %{$h_files}){
 		$path ||= $h_map->{$ident} || File::Spec->join('.', $ident);
 
@@ -306,11 +305,9 @@ sub install_headers{
 			next;
 		}
 
-		$ToInstall{$path} = File::Spec->join('$(INST_LIBDIR)', $name, $path);
+		$ToInstall{$path} = File::Spec->join('$(INST_ARCHAUTODIR)', $ident);
 
-		#$self->provides($ident => { file => $path });
-
-		_verbose "install: $ident ($path)" if _VERBOSE;
+		_verbose "install: $path as $ident" if _VERBOSE;
 		$self->_extract_functions_from_header_file($path);
 	}
 
@@ -476,6 +473,8 @@ This document describes Module::Install::XSUtil version 0.03.
 Module::Install::XSUtil provides a set of utilities to setup distributions
 which include XS module.
 
+See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
+
 =head1 FUNCTIONS
 
 =head2 requires_xs $module => ?$version
@@ -508,8 +507,6 @@ Declares providing header files.
 
 If I<@header_files> are omitted, all the header files in B<include paths> will
 be installed.
-
-This information are added to F<META.yml>.
 
 =head2 cc_append_to_inc @include_paths
 

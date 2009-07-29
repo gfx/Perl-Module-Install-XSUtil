@@ -5,10 +5,11 @@ use inc::Module::Install;
 name 'Module-Install-XSUtil';
 all_from 'lib/Module/Install/XSUtil.pm';
 
+requires 'Module::Install' => 0.77;
+
 test_requires 'Test::More' => 0.88;
 
 # these modules are required for t/01_example.t
-test_requires 'Module::Install'   => 0.77;
 test_requires 'Devel::PPPort'     => 3.19;
 test_requires 'ExtUtils::ParseXS' => 2.20;
 test_requires 'XSLoader'          => 0.08;
