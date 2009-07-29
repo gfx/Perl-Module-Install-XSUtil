@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.04 Wed Jul 29 11:41:55 2009
+	- fix cc_append_to_ccflags() on non-Win32 system
+	- code refactering
+
 0.03 Tue Jul 28 12:05:42 2009
 	- May this work on Windows!
 
