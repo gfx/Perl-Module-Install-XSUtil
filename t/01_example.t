@@ -27,7 +27,7 @@ ok -e 'ppport.h', 'ppport.h exists';
 my %h_files;
 
 find sub{
-	$h_files{$_} = $File::Find::name if / \.h \z/xms;
+	$h_files{$_} = File::Spec->canonpath($File::Find::name) if / \.h \z/xms;
 }, qw(blib);
 
 is scalar(keys %h_files), 3, 'two head files are installed';
