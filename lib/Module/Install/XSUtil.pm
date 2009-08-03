@@ -523,6 +523,10 @@ L<ExtUtils::Depends>.
 
 L<Module::Install>.
 
+L<Module::Install::CheckLib>.
+
+L<Devel::CheckLib>.
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright (c) 2009, Goro Fuji (gfx). Some rights reserved.
