@@ -13,6 +13,7 @@ test_requires 'Test::More' => 0.88;
 test_requires 'Devel::PPPort'     => 3.19;
 test_requires 'ExtUtils::ParseXS' => 2.20;
 test_requires 'XSLoader'          => 0.08;
+test_requires 'XS::MRO::Compat'   => 0.12;
 
 tests 't/*.t';
 author_tests 'xt';

@@ -9,6 +9,8 @@
 #include "foo/bar.h"
 #include "foo/baz.h"
 
+#include "mro_compat.h"
+
 bool
 foo_is_ok(void){
 	return TRUE;
