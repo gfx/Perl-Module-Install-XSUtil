@@ -42,6 +42,15 @@ sub _xs_initialize{
 	return;
 }
 
+sub _is_gcc{
+	return defined $Config{gccversion};
+}
+
+# Microsoft Visual C++ Compiler
+sub _is_msvc{
+	return $Config{cc} =~ /\A cl \b /xmsi;
+}
+
 sub use_ppport{
 	my($self, $dppp_version) = @_;
 
@@ -74,11 +83,10 @@ sub cc_warnings{
 
 	$self->_xs_initialize();
 
-	if($Config{gccversion}){
+	if(_is_gcc()){
 		$self->cc_append_to_ccflags(qw(-Wall -Wextra));
 	}
-	elsif($Config{cc} =~ /\A cl \b /xmsi){
-		# Microsoft Visual C++ Compiler
+	elsif(_is_msvc()){
 		$self->cc_append_to_ccflags('-W3');
 	}
 	else{
@@ -412,8 +420,7 @@ sub const_cccmd {
 	my $cccmd  = $self->SUPER::const_cccmd(@_);
 	return q{} unless $cccmd;
 
-	if ($Config{cc} =~ /\A cl \b /xmsi){
-		# Microsoft Visual C++ Compiler
+	if (Module::Install::XSUtil::_is_msvc()){
 		$cccmd .= ' -Fo$@';
 	}
 	else {
