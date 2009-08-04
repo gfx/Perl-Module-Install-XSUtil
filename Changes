@@ -1,7 +1,10 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.07 Tue Aug  4 17:02:32 2009
+	- apply a patch from RT #48321-2 (thanks to Taro Nishino)
+
 0.06 Tue Aug  4 09:20:08 2009
-	- fix tests for Win32 (RT #48321 reported by Taro Nishino)
+	- fix tests for Win32 (RT #48321-1 reported by Taro Nishino)
 	- add cc_define() command
 
 0.05 Mon Aug  3 16:55:20 2009
