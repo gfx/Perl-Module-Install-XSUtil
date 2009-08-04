@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.06
+
+
 0.05 Mon Aug  3 16:55:20 2009
 	- fix the algorithm for searching headers and libs
 

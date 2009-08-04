@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -434,7 +434,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.05.
+This document describes Module::Install::XSUtil version 0.06.
 
 =head1 SYNOPSIS
 
@@ -462,7 +462,7 @@ This document describes Module::Install::XSUtil version 0.05.
 	cc_src_paths 'src'; # all the XS and C source files are in src/
 
 	# Installs header files
-	install_headers; # all the header files are in @cc_include_paths
+	install_headers; # all the header files in @cc_include_paths
 
 
 =head1 DESCRIPTION
