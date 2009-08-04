@@ -145,9 +145,24 @@ sub cc_append_to_ccflags{
 	$self->_xs_initialize();
 
 	my $mm    = $self->makemaker_args;
-	
+
 	$mm->{CCFLAGS} ||= $Config{ccflags};
 	$mm->{CCFLAGS}  .= q{ } . join q{ }, @ccflags;
+	return;
+}
+
+sub cc_define{
+	my($self, @defines) = @_;
+
+	$self->_xs_initialize();
+
+	my $mm = $self->makemaker_args;
+	if(exists $mm->{DEFINE}){
+		$mm->{DEFINE} .= q{ } . join q{ }, @defines;
+	}
+	else{
+		$mm->{DEFINE}  = join q{ }, @defines;
+	}
 	return;
 }
 
@@ -426,16 +441,19 @@ This document describes Module::Install::XSUtil version 0.05.
 	# in Makefile.PL
 	use inc::Module::Install;
 
+	# This is a special version of requires().
+	# If XS::SomeFeature provides header files,
+	# this will add its include paths into INC
+	requies_xs 'XS::SomeFeature';
+
 	# No need to include ppport.h. It's created here.
 	use_ppport 3.19;
 
 	# Enables C compiler warnings, e.g. -Wall -Wextra
 	cc_warnings;
 
-	# This is a special version of requires().
-	# If XS::SomeFeature provides header files,
-	# this will add its include paths into INC
-	requies_xs 'XS::SomeFeature';
+	# Sets some C pre-processor macros.
+	cc_define q{-DUSE_SOME_FEATURE=42};
 
 	# Sets paths for header files
 	cc_include_paths 'include'; # all the header files are in include/
@@ -471,6 +489,10 @@ and adds C<-DUSE_PPPORT> to B<ccflags>.
 =head2 cc_warnings
 
 Enables C compiler warnings.
+
+=head2 cc_define @macros
+
+Sets C<cpp> macros as compiler options.
 
 =head2 cc_src_paths @source_paths
 

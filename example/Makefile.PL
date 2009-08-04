@@ -10,14 +10,16 @@ use inc::Module::Install;
 
 all_from 'lib/Foo.pm';
 
+requires_xs 'XS::MRO::Compat' => 0.12;
+
 use_ppport 3.19;
 
 cc_warnings;
 
-requires_xs 'XS::MRO::Compat' => 0.12;
-
 cc_include_paths 'include';
 cc_src_paths     'src';
+
+cc_define -DFOO_OK;
 
 install_headers;
 

@@ -13,7 +13,11 @@
 
 bool
 foo_is_ok(void){
+#ifdef FOO_OK
 	return TRUE;
+#else
+	return FALSE;
+#endif
 }
 
 MODULE = Foo	PACKAGE = Foo
