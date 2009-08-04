@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -42,11 +42,12 @@ sub _xs_initialize{
 	return;
 }
 
+# GNU C Compiler
 sub _is_gcc{
 	return $Config{gccversion};
 }
 
-# Microsoft Visual C++ Compiler
+# Microsoft Visual C++ Compiler (cl.exe)
 sub _is_msvc{
 	return $Config{cc} =~ /\A cl \b /xmsi;
 }
@@ -185,9 +186,9 @@ sub requires_xs{
 	my(@inc, @libs);
 
 	while(my $module = each %added){
-		my $mod_basedir = quotemeta( File::Spec->join(split /::/, $module) );
-		my $rx_header = qr{\A (.+ $mod_basedir) .+ \.h \z}xmsi;
-		my $rx_lib    = qr{\A (.+ $mod_basedir) .+ (\w+) \. (?: lib | dll | a) \z}xmsi;
+		my $mod_basedir = File::Spec->join(split /::/, $module);
+		my $rx_header = qr{\A ( .+ \Q$mod_basedir\E ) .+ \.h(?:pp)? \z}xmsi;
+		my $rx_lib    = qr{\A ( .+ \Q$mod_basedir\E ) .+ (\w+) \. (?: lib | dll | a) \z}xmsi;
 
 		SCAN_INC: foreach my $inc_dir(@INC){
 			my @dirs = grep{ -e } File::Spec->join($inc_dir, 'auto', $mod_basedir), File::Spec->join($inc_dir, $mod_basedir);
@@ -269,7 +270,7 @@ sub cc_include_paths{
     foreach my $dir(@dirs){
 		my $prefix = quotemeta( File::Spec->catfile($dir, '') );
 		find(sub{
-			return unless / \.h \z/xms;
+			return unless / \.h(?:pp)? \z/xms;
 
 			(my $h_file = $File::Find::name) =~ s/ \A $prefix //xms;
 			$h_map->{$h_file} = $File::Find::name;
@@ -441,7 +442,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.06.
+This document describes Module::Install::XSUtil version 0.07.
 
 =head1 SYNOPSIS
 
@@ -555,6 +556,8 @@ L<Module::Install>.
 L<Module::Install::CheckLib>.
 
 L<Devel::CheckLib>.
+
+L<ExtUtils::MakeMaker>.
 
 =head1 LICENSE AND COPYRIGHT
 
