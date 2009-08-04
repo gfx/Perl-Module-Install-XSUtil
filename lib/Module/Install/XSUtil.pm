@@ -43,7 +43,7 @@ sub _xs_initialize{
 }
 
 sub _is_gcc{
-	return defined $Config{gccversion};
+	return $Config{gccversion};
 }
 
 # Microsoft Visual C++ Compiler
@@ -111,7 +111,7 @@ sub cc_append_to_inc{
 	}
 
 	my $mm    = $self->makemaker_args;
-	my $paths = join q{ }, map{ qq{"-I$_"} } @dirs;
+	my $paths = join q{ }, map{ s{\\}{\\\\}g; qq{"-I$_"} } @dirs;
 
 	if($mm->{INC}){
 		$mm->{INC} .=  q{ } . $paths;
@@ -185,7 +185,7 @@ sub requires_xs{
 	my(@inc, @libs);
 
 	while(my $module = each %added){
-		my $mod_basedir = File::Spec->join(split /::/, $module);
+		my $mod_basedir = quotemeta( File::Spec->join(split /::/, $module) );
 		my $rx_header = qr{\A (.+ $mod_basedir) .+ \.h \z}xmsi;
 		my $rx_lib    = qr{\A (.+ $mod_basedir) .+ (\w+) \. (?: lib | dll | a) \z}xmsi;
 
@@ -390,7 +390,7 @@ sub cc_append_to_funclist{
 	my $mm = $self->makemaker_args;
 
 	push @{$mm->{FUNCLIST} ||= []}, @functions;
-	$mm->{DL_FUNCS} ||= { '$(NAME)' => ['boot_$(NAME)'] };
+	$mm->{DL_FUNCS} ||= { '$(NAME)' => [] };
 
 	return;
 }
