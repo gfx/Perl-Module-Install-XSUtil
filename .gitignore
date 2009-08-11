@@ -4,6 +4,7 @@
 *.o
 *.obj
 *.bs
+*.bak
 Makefile*
 !Makefile.PL
 *blib
