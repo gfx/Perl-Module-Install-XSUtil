@@ -187,8 +187,8 @@ sub requires_xs{
 
 	while(my $module = each %added){
 		my $mod_basedir = File::Spec->join(split /::/, $module);
-		my $rx_header = qr{\A ( .+ \Q$mod_basedir\E ) .+ \.h(?:pp)? \z}xmsi;
-		my $rx_lib    = qr{\A ( .+ \Q$mod_basedir\E ) .+ (\w+) \. (?: lib | dll | a) \z}xmsi;
+		my $rx_header = qr{\A ( .+ \Q$mod_basedir\E ) .+ \. h(?:pp)? \z}xmsi;
+		my $rx_lib    = qr{\A ( .+ \Q$mod_basedir\E ) .+ \. (?: lib | dll | a) \z}xmsi;
 
 		SCAN_INC: foreach my $inc_dir(@INC){
 			my @dirs = grep{ -e } File::Spec->join($inc_dir, 'auto', $mod_basedir), File::Spec->join($inc_dir, $mod_basedir);
@@ -197,11 +197,12 @@ sub requires_xs{
 
 			my $n_inc = scalar @inc;
 			find(sub{
-				if($File::Find::name =~ $rx_header){
-					push @inc, $1;
+				if(my($incdir) = $File::Find::name =~ $rx_header){
+					push @inc, $incdir;
 				}
-				elsif($File::Find::name =~ $rx_lib){
-					push @libs, [$2, $1];
+				elsif(my($libdir) = $File::Find::name =~ $rx_lib){
+					my($libname) = $_ =~ /\A (?:lib)? (\w+) /xmsi;
+					push @libs, [$libname, $libdir];
 				}
 			}, @dirs);
 
