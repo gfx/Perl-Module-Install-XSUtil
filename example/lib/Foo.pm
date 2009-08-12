@@ -6,6 +6,7 @@ $VERSION = '1.23';
 use XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
+use B::Hooks::OP::Annotation;
 
 1;
 

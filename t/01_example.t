@@ -13,14 +13,16 @@ chdir $dist_dir or die "Cannot chdir to $dist_dir: $!";
 
 my $make = $Config{make};
 
-ok scalar `$^X Makefile.PL`, "$^X Makefile.PL";
-is $?, 0, '... success';
+my $out;
 
-ok scalar `$make`, $make;
-is $?, 0, '... success';
+ok($out = `$^X Makefile.PL`, "$^X Makefile.PL");
+is $?, 0, '... success' or diag $out;
 
-ok scalar `$make test`, "$make test";
-is $?, 0, '... success';
+ok($out = `$make`, $make);
+is $?, 0, '... success' or diag $out;
+
+ok($out = `$make test`, "$make test");
+is $?, 0, '... success' or diag $out;
 
 ok -e 'ppport.h', 'ppport.h exists';
 
