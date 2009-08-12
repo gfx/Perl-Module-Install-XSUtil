@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.08 Wed Aug 12 11:36:27 2009
+	- fix checklib algorithm
+	- enhance tests
+
 0.07 Tue Aug  4 17:02:32 2009
 	- apply a patch from RT #48321-2 (thanks to Taro Nishino)
 
