@@ -249,9 +249,8 @@ sub cc_src_paths{
 		}
 		else{
 			_verbose "c: $c" if _VERBOSE;
+			push @{$C_ref}, $c;
 		}
-
-		push @{$C_ref}, $c;
 	}
 
 	$self->cc_append_to_inc('.');
