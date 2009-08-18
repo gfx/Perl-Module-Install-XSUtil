@@ -9,7 +9,7 @@
 #include "foo/bar.h"
 #include "foo/baz.h"
 
-int bar_is_ok(
+X(bar_is_ok)(
 	X(a), X(b), X(c)
 ){
 	return a + b + c;

@@ -1,1 +1,3 @@
-/* foo/baz_internal.h for testing */
+/* foo/baz.h for testing */
+
+

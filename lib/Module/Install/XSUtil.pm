@@ -28,6 +28,10 @@ sub _verbose{
 	print STDERR q{# }, @_, "\n";
 }
 
+sub _xs_debugging{
+    return $ENV{XS_DEBUG} || scalar( grep{ $_ eq '-g' } @ARGV );
+}
+
 sub _xs_initialize{
 	my($self) = @_;
 
@@ -36,6 +40,18 @@ sub _xs_initialize{
 		$self->requires_external_cc();
 		$self->build_requires(%BuildRequires);
 		$self->makemaker_args(OBJECT => '$(O_FILES)');
+
+		if($self->_xs_debugging()){
+            # override $Config{optimize}
+			if(_is_msvc()){
+				$self->makemaker_args(OPTIMIZE => '-Zi');
+			}
+			else{
+				$self->makemaker_args(OPTIMIZE => '-g');
+			}
+
+			$self->cc_define('-DDEBUGGING');
+        }
 
 		$self->{xsu_initialized} = 1;
 	}
@@ -96,6 +112,7 @@ sub cc_warnings{
 
 	return;
 }
+
 
 sub cc_append_to_inc{
 	my($self, @dirs) = @_;
@@ -331,35 +348,52 @@ sub install_headers{
 }
 
 
-# NOTE:
-# This function tries to extract C functions from header files.
-# Using heuristic methods, not a smart parser.
 sub _extract_functions_from_header_file{
 	my($self, $h_file) = @_;
 
 	my @functions;
 
+	# get header file contents through cpp(1)
 	my $contents = do {
-		local *IN;
 		local $/;
-		open IN, "< $h_file" or die "Cannot open $h_file: $!";
-		scalar <IN>;
+
+		my $mm = $self->makemaker_args;
+
+		my $cppflags = q{-I"}. File::Spec->join($Config{archlib}, 'CORE') . q{"};
+
+		$cppflags   .= ' ' . $mm->{INC} if $mm->{INC};
+
+		$cppflags   .= ' ' . ($mm->{CCFLAGS} || $Config{ccflags});
+		$cppflags   .= ' ' . $mm->{DEFINE} if $mm->{DEFINE};
+
+		my $add_include = _is_msvc() ? '-FI' : '-include';
+		$cppflags   .= ' ' . join ' ', map{ qq{$add_include "$_"} } qw(EXTERN.h perl.h XSUB.h);
+
+		my $cppcmd = qq{$Config{cpprun} $cppflags $h_file};
+
+		#_verbose("extract functions from: $cppcmd") if _VERBOSE;
+		`$cppcmd`;
 	};
 
-	# remove C comments
-	$contents =~ s{ /\* .*? \*/ }{}xmsg;
+	unless(defined $contents){
+		die "Cannot call C pre-processor ($Config{cpprun}): $! ($?)";
+	}
 
-	# remove cpp directives
+	# remove other include file contents
 	$contents =~ s{
-		\# \s* \w+
-			(?: [^\n]* \\ [\n])*
-			[^\n]* [\n]
+		^\s* \# \s+ \d+ \s+ (?! "\Q$h_file\E" ) .* $
+		.*
+		^(?= \s* \#)
+	}{}xmsig;
+
+	# remove __attribute__(...)
+	$contents =~ s{
+		__attribute__
+		\s*
+		\(
+			(?: \( [^\)]+ \) | [^\)]+ ) # ((...)) or (...)
+		\)
 	}{}xmsg;
-
-	# register keywords
-	my %skip;
-	@skip{qw(if while for int void unsignd float double bool char)} = ();
-
 
 	while($contents =~ m{
 			([^\\;\s]+                # type
@@ -367,27 +401,29 @@ sub _extract_functions_from_header_file{
 			([a-zA-Z_][a-zA-Z0-9_]*)  # function name
 			\s*
 			\( [^;#]* \)              # argument list
-			[^;]*                     # attributes or something
+			[\w\s\(\)]*               # attributes or something
 			;)                        # end of declaration
 		}xmsg){
 			my $decl = $1;
 			my $name = $2;
 
-			next if exists $skip{$name};
-			next if $name eq uc($name);  # maybe macros
-
 			next if $decl =~ /\b typedef \b/xmsi;
 
 			next if $decl =~ /\b [0-9]+ \b/xmsi; # integer literals
-			next if $decl =~ / ["'] /xmsi;       # string/char literals
-			#"
 
 			push @functions, $name;
 
-			_verbose "function: $name" if _VERBOSE;
+			if(_VERBOSE){
+				$decl =~ tr/\n\r\t / /s;
+				$decl =~ s/ (\Q$name\E) /<$name>/xms;
+				_verbose("decl: $decl");
+			}
 	}
 
-	$self->cc_append_to_funclist(@functions) if @functions;
+	if(@functions){
+		$self->cc_append_to_funclist(@functions);
+	}
+
 	return;
 }
 

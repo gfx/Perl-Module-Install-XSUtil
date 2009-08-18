@@ -1,5 +1,11 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.10
+	- add '-g' command line option (perl Makefile.PL -g)
+		- avoid optimization (remove -Ox from OPTIMIZE)
+		- add -DDEBUGGING to DEFINE
+	- make the function finding algorithm more smart (fix RT #)
+
 0.09 Thu Aug 13 22:27:20 2009
 	- fix a linking library issue on Cygwin
 
