@@ -8,6 +8,10 @@ use lib File::Spec->join($Bin, '..', 'lib');
 
 use inc::Module::Install;
 
+BEGIN{
+	@ARGV = qw(-g) unless @ARGV;
+}
+
 all_from 'lib/Foo.pm';
 
 requires_xs 'B::Hooks::OP::Annotation'; # for testing only

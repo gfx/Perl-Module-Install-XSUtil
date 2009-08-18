@@ -36,6 +36,7 @@ sub _xs_initialize{
 	my($self) = @_;
 
 	unless($self->{xsu_initialized}){
+		$self->{xsu_initialized} = 1;
 
 		$self->requires_external_cc();
 		$self->build_requires(%BuildRequires);
@@ -52,8 +53,6 @@ sub _xs_initialize{
 
 			$self->cc_define('-DDEBUGGING');
         }
-
-		$self->{xsu_initialized} = 1;
 	}
 	return;
 }
@@ -347,11 +346,14 @@ sub install_headers{
 	return;
 }
 
+my $home_directory;
 
 sub _extract_functions_from_header_file{
 	my($self, $h_file) = @_;
 
 	my @functions;
+
+	($home_directory) = <~> unless defined $home_directory;
 
 	# get header file contents through cpp(1)
 	my $contents = do {
@@ -359,7 +361,8 @@ sub _extract_functions_from_header_file{
 
 		my $mm = $self->makemaker_args;
 
-		my $cppflags = q{-I"}. File::Spec->join($Config{archlib}, 'CORE') . q{"};
+		my $cppflags = q{"-I}. File::Spec->join($Config{archlib}, 'CORE') . q{"};
+		$cppflags    =~ s/~/$home_directory/g;
 
 		$cppflags   .= ' ' . $mm->{INC} if $mm->{INC};
 
@@ -371,7 +374,7 @@ sub _extract_functions_from_header_file{
 
 		my $cppcmd = qq{$Config{cpprun} $cppflags $h_file};
 
-		#_verbose("extract functions from: $cppcmd") if _VERBOSE;
+		_verbose("extract functions from: $cppcmd") if _VERBOSE;
 		`$cppcmd`;
 	};
 
