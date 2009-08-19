@@ -43,16 +43,14 @@ sub _xs_initialize{
 		$self->makemaker_args(OBJECT => '$(O_FILES)');
 
 		if($self->_xs_debugging()){
-            # override $Config{optimize}
+			# override $Config{optimize}
 			if(_is_msvc()){
 				$self->makemaker_args(OPTIMIZE => '-Zi');
 			}
 			else{
 				$self->makemaker_args(OPTIMIZE => '-g');
 			}
-
-			$self->cc_define('-DDEBUGGING');
-        }
+		}
 	}
 	return;
 }
