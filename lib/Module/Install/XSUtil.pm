@@ -325,6 +325,7 @@ sub install_headers{
 
 	while(my($ident, $path) = each %{$h_files}){
 		$path ||= $h_map->{$ident} || File::Spec->join('.', $ident);
+		$path   = File::Spec->canonpath($path);
 
 		unless($path && -e $path){
 			push @not_found, $ident;
@@ -381,11 +382,16 @@ sub _extract_functions_from_header_file{
 	}
 
 	# remove other include file contents
+	my %cache;
+
 	$contents =~ s{
-		^\s* \# \s+ \d+ \s+ (?! "\Q$h_file\E" ) .* $
-		.*
-		^(?= \s* \#)
-	}{}xmsig;
+		^\s* \# \s+ \d+ \s+ " ([^"]+) " # line "file" extra...
+		([^\#]*)
+	}{
+		my($file, $content) = ($1, $2);
+		$file = $cache{$file} ||= File::Spec->canonpath($file);
+		$file eq $h_file ? $content : '';
+	}xmsige;
 
 	# remove __attribute__(...)
 	$contents =~ s{
