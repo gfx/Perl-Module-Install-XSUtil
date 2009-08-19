@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.11 Wed Aug 19 16:15:33 2009
+	- re-fix the algorithm to find functions (RT #48797)
+	- remove -DDEBUGGING in '-g' option
+
 0.10 Tue Aug 18 13:05:46 2009
 	- add '-g' command line option (perl Makefile.PL -g)
 		- avoid optimization (remove -Ox from OPTIMIZE)
