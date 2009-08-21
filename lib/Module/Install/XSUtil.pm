@@ -356,8 +356,6 @@ sub _extract_functions_from_header_file{
 
 	# get header file contents through cpp(1)
 	my $contents = do {
-		local $/;
-
 		my $mm = $self->makemaker_args;
 
 		my $cppflags = q{"-I}. File::Spec->join($Config{archlib}, 'CORE') . q{"};
@@ -382,16 +380,12 @@ sub _extract_functions_from_header_file{
 	}
 
 	# remove other include file contents
-	my %cache;
-
+	my $chfile = q/\# (?:line)? \s+ \d+/;
 	$contents =~ s{
-		^\s* \# \s+ \d+ \s+ " ([^"]+) " # line "file" extra...
-		([^\#]*)
-	}{
-		my($file, $content) = ($1, $2);
-		$file = $cache{$file} ||= File::Spec->canonpath($file);
-		$file eq $h_file ? $content : '';
-	}xmsige;
+		^$chfile  \s+ (?! "\Q$h_file\E" ) .* $
+		.*
+		^(?= $chfile)
+	}{}xmsig;
 
 	# remove __attribute__(...)
 	$contents =~ s{
