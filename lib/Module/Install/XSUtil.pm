@@ -248,6 +248,8 @@ sub cc_src_paths{
 
 	$self->_xs_initialize();
 
+	@dirs = qw(.) unless @dirs;
+
 	my $mm     = $self->makemaker_args;
 
 	my $XS_ref = $mm->{XS} ||= {};
