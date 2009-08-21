@@ -389,15 +389,6 @@ sub _extract_functions_from_header_file{
 		^(?= $chfile)
 	}{}xmsig;
 
-	# remove __attribute__(...)
-	$contents =~ s{
-		__attribute__
-		\s*
-		\(
-			(?: \( [^\)]+ \) | [^\)]+ ) # ((...)) or (...)
-		\)
-	}{}xmsg;
-
 	while($contents =~ m{
 			([^\\;\s]+                # type
 			\s+
@@ -410,9 +401,8 @@ sub _extract_functions_from_header_file{
 			my $decl = $1;
 			my $name = $2;
 
-			next if $decl =~ /\b typedef \b/xmsi;
-
-			next if $decl =~ /\b [0-9]+ \b/xmsi; # integer literals
+			next if $decl =~ /\b typedef \b/xms;
+			next if $name =~ /^_/xms; # skip something private
 
 			push @functions, $name;
 
@@ -584,6 +574,13 @@ Low level API.
 =head1 DEPENDENCIES
 
 Perl 5.5.3 or later.
+
+=head1 NOTE
+
+In F<Makefile.PL>, you can use C<author_requires>, which is provided by C<Module::Install::AuthorReauires>,
+in order to tell co-developers that they need to install this plugin.
+
+	author_requires 'Module::Install::XSUtil';
 
 =head1 BUGS
 
