@@ -46,6 +46,16 @@ like $h_files{'foo.h'}, f2rx(qw(Foo foo.h));
 like $h_files{'bar.h'}, f2rx(qw(Foo bar.h));
 like $h_files{'baz.h'}, f2rx(qw(Foo foo baz.h));
 
+my $Makefile = do{
+    local *MF;
+    open MF, 'Makefile' or die $!;
+    local $/;
+    <MF>;
+};
+
+like $Makefile, qr/\b foo_is_ok \b/xms, 'Makefile includes foo_is_ok()';
+like $Makefile, qr/\b bar_is_ok \b/xms, 'Makefile includes bar_is_ok()';
+
 ok scalar `$make realclean`, "$make realclean";
 is $?, 0, '... success';
 
