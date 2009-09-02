@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.13 Wed Sep  2 17:59:04 2009
+	- fix RT #48738 and add tests on it
+
 0.12 Fri Aug 21 12:54:20 2009
 	- re-fix the algorithm to find functions again (RT #48797)
 	- refer to Module::Install::AuthorRequires
