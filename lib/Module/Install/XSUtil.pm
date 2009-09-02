@@ -86,7 +86,7 @@ sub use_ppport{
 	
 	if(-e $filename){
 		$self->clean_files($filename);
-		$self->cc_append_to_ccflags('-DUSE_PPPORT');
+		$self->cc_define('-DUSE_PPPORT');
 		$self->cc_append_to_inc('.');
 	}
 	return;
@@ -248,7 +248,7 @@ sub cc_src_paths{
 
 	$self->_xs_initialize();
 
-	@dirs = qw(.) unless @dirs;
+	return unless @dirs;
 
 	my $mm     = $self->makemaker_args;
 
@@ -382,12 +382,19 @@ sub _extract_functions_from_header_file{
 	}
 
 	# remove other include file contents
-	my $chfile = q/\# (?:line)? \s+ \d+/;
+	my $chfile = q/\# (?:line)? \s+ \d+ /;
 	$contents =~ s{
-		^$chfile  \s+ (?! "\Q$h_file\E" ) .* $
-		.*
+		^$chfile  \s+ (?!"\Q$h_file\E")
+		.*?
 		^(?= $chfile)
 	}{}xmsig;
+
+	if(_VERBOSE){
+		local *H;
+		open H, "> $h_file.out"
+			and print H $contents
+			and close H;
+	}
 
 	while($contents =~ m{
 			([^\\;\s]+                # type
@@ -437,8 +444,6 @@ sub cc_append_to_funclist{
 
 package
 	MY;
-
-use Config;
 
 # XXX: We must append to PM inside ExtUtils::MakeMaker->new().
 sub init_PM{
@@ -492,13 +497,14 @@ This document describes Module::Install::XSUtil version 0.12.
 	# this will add its include paths into INC
 	requies_xs 'XS::SomeFeature';
 
-	# No need to include ppport.h. It's created here.
+	# Uses ppport.h
+	# No need to include it. It's created here.
 	use_ppport 3.19;
 
 	# Enables C compiler warnings, e.g. -Wall -Wextra
 	cc_warnings;
 
-	# Sets some C pre-processor macros.
+	# Sets C pre-processor macros.
 	cc_define q{-DUSE_SOME_FEATURE=42};
 
 	# Sets paths for header files
@@ -514,7 +520,7 @@ This document describes Module::Install::XSUtil version 0.12.
 =head1 DESCRIPTION
 
 Module::Install::XSUtil provides a set of utilities to setup distributions
-which include XS module.
+which include or depend on XS module.
 
 See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
 
@@ -530,7 +536,7 @@ for what I<$module> provides.
 Create F<ppport.h> using C<Devel::PPPort::WriteFile()>.
 
 This command calls C<< configure_requires 'Devel::PPPort' => $version >>
-and adds C<-DUSE_PPPORT> to B<ccflags>.
+and adds C<-DUSE_PPPORT> to C<MakeMaker>'s C<DEFINE>.
 
 =head2 cc_warnings
 
@@ -550,7 +556,8 @@ Sets include paths for a C compiler.
 
 =head2 install_headers ?@header_files
 
-Declares providing header files.
+Declares providing header files, extracts functions from these header files,
+and adds these fuctions to C<MakeMaker>'s C<FUNCLIST>.
 
 If I<@header_files> are omitted, all the header files in B<include paths> will
 be installed.
@@ -571,14 +578,21 @@ Low level API.
 
 Low level API.
 
+=head1 OPTIONS
+
+Under the control of this module, F<Makefile.PL> accepts C<-g> option, which
+sets C<MakeMaker>'s C<OPTIMIE> C<-g> (or something like). It will disable
+optimization and enable some debugging features.
+
 =head1 DEPENDENCIES
 
 Perl 5.5.3 or later.
 
 =head1 NOTE
 
-In F<Makefile.PL>, you can use C<author_requires>, which is provided by C<Module::Install::AuthorReauires>,
-in order to tell co-developers that they need to install this plugin.
+In F<Makefile.PL>, you might want to use C<author_requires>, which is
+provided by C<Module::Install::AuthorReauires>, in order to tell co-developers
+that they need to install this plugin.
 
 	author_requires 'Module::Install::XSUtil';
 
