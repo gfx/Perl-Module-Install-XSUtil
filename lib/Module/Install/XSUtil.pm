@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -485,7 +485,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.12.
+This document describes Module::Install::XSUtil version 0.13.
 
 =head1 SYNOPSIS
 
@@ -557,7 +557,7 @@ Sets include paths for a C compiler.
 =head2 install_headers ?@header_files
 
 Declares providing header files, extracts functions from these header files,
-and adds these fuctions to C<MakeMaker>'s C<FUNCLIST>.
+and adds these functions to C<MakeMaker>'s C<FUNCLIST>.
 
 If I<@header_files> are omitted, all the header files in B<include paths> will
 be installed.
