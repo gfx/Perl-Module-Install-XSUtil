@@ -1,5 +1,5 @@
+#!perl -w
 use strict;
-use warnings;
 use inc::Module::Install;
 
 all_from 'lib/Module/Install/XSUtil.pm';
