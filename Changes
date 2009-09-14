@@ -1,5 +1,11 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.14 Mon Sep 14 15:02:19 2009
+	- Improve debugging mode
+		- "-g" option is set implicitly in author's mode
+		- Set -DXS_ASSERT in author's mode (see XS::Assert)
+		- Set -Wdeclaration-after-statement in cc_warnings()
+
 0.13 Wed Sep  2 17:59:04 2009
 	- fix RT #48738 and add tests on it
 
