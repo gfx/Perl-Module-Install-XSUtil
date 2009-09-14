@@ -98,7 +98,8 @@ sub cc_warnings{
 	$self->_xs_initialize();
 
 	if(_is_gcc()){
-		$self->cc_append_to_ccflags(qw(-Wall -Wextra));
+	    # Note: MSVC++ doesn't support C99, so -Wdeclaration-after-statement helps ensure C89 specs.
+		$self->cc_append_to_ccflags(qw(-Wall -Wextra -Wdeclaration-after-statement));
 	}
 	elsif(_is_msvc()){
 		$self->cc_append_to_ccflags('-W3');
