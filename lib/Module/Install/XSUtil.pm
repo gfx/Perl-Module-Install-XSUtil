@@ -49,6 +49,7 @@ sub _xs_initialize{
 			else{
 				$self->makemaker_args(OPTIMIZE => '-g');
 			}
+			$self->cc_define('-DXS_ASSERT');
 		}
 	}
 	return;
