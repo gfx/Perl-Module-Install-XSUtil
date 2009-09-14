@@ -17,7 +17,6 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %BuildRequires = (
-	'Devel::PPPort'     => 3.19,
 	'ExtUtils::ParseXS' => 2.20,
 	'XSLoader'          => 0.08,
 );
