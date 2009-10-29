@@ -17,11 +17,11 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %BuildRequires = (
-	'ExtUtils::ParseXS' => 2.20,
+	'ExtUtils::ParseXS' => 2.21, # the newer, the better
 );
 
 my %Requires = (
-	'XSLoader' => 0.06,
+	'XSLoader' => 0.10, # the newer, the better
 );
 
 my %ToInstall;
