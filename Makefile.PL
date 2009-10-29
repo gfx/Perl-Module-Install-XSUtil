@@ -10,8 +10,8 @@ test_requires 'Test::More' => 0.88;
 
 # these modules are required for t/01_example.t
 test_requires 'Devel::PPPort'     => 3.19;
-test_requires 'ExtUtils::ParseXS' => 2.20;
-test_requires 'XSLoader'          => 0.08;
+test_requires 'ExtUtils::ParseXS' => 2.21;
+test_requires 'XSLoader'          => 0.10;
 test_requires 'B::Hooks::OP::Annotation'
                                   => 0.43;
 
