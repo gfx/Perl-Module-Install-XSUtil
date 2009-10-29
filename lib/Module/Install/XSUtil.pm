@@ -31,7 +31,7 @@ sub _verbose{
 }
 
 sub _xs_debugging{
-    return $ENV{XS_DEBUG} || $Module::Install::AUTHOR || scalar( grep{ $_ eq '-g' } @ARGV );
+    return $ENV{XS_DEBUG} || scalar( grep{ $_ eq '-g' } @ARGV );
 }
 
 sub _xs_initialize{
