@@ -103,7 +103,15 @@ sub cc_warnings{
 
 	if(_is_gcc()){
 	    # Note: MSVC++ doesn't support C99, so -Wdeclaration-after-statement helps ensure C89 specs.
-		$self->cc_append_to_ccflags(qw(-Wall -Wextra -Wdeclaration-after-statement));
+		$self->cc_append_to_ccflags(qw(-Wall -Wdeclaration-after-statement));
+
+		no warnings 'numeric';
+		if($Config{gccversion} >= 4.00){
+            $self->cc_append_to_ccflags('-Wextra');
+		}
+		else{
+		    $self->cc_append_to_cclfags('-W');
+		}
 	}
 	elsif(_is_msvc()){
 		$self->cc_append_to_ccflags('-W3');
