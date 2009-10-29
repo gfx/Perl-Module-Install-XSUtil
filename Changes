@@ -1,5 +1,10 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.15 Thu Oct 29 09:31:07 2009
+	- Requires newer versions in prerequisites
+	- Switch the use of -Wextra/-W by gcc versions
+	- Revert "-g option is set implicitly in author's mode"
+
 0.14 Mon Sep 14 15:02:19 2009
 	- Improve debugging mode
 		- "-g" option is set implicitly in author's mode
