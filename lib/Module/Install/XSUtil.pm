@@ -18,7 +18,10 @@ use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %BuildRequires = (
 	'ExtUtils::ParseXS' => 2.20,
-	'XSLoader'          => 0.08,
+);
+
+my %Requires = (
+	'XSLoader' => 0.06,
 );
 
 my %ToInstall;
@@ -39,6 +42,7 @@ sub _xs_initialize{
 
 		$self->requires_external_cc();
 		$self->build_requires(%BuildRequires);
+		$self->requires(%Requires);
 		$self->makemaker_args(OBJECT => '$(O_FILES)');
 
 		if($self->_xs_debugging()){
