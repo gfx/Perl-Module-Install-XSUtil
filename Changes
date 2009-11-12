@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.17 Thu Nov 12 13:30:47 2009
+    - Fix cc_warnings() for old gcc
+    - Add cc_available() using ExtUtils::CBuuilder
+
 0.16 Mon Nov  2 11:55:46 2009
 	- Fix a typo in cc_warnings()
 
