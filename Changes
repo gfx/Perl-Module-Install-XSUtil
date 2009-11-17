@@ -5,63 +5,63 @@ Revision history for Perl extension Module::Install::XSUtil
     - Add cc_available() using ExtUtils::CBuuilder
 
 0.16 Mon Nov  2 11:55:46 2009
-	- Fix a typo in cc_warnings()
+    - Fix a typo in cc_warnings()
 
 0.15 Thu Oct 29 09:31:07 2009
-	- Requires newer versions in prerequisites
-	- Switch the use of -Wextra/-W by gcc versions
-	- Revert "-g option is set implicitly in author's mode"
+    - Requires newer versions in prerequisites
+    - Switch the use of -Wextra/-W by gcc versions
+    - Revert "-g option is set implicitly in author's mode"
 
 0.14 Mon Sep 14 15:02:19 2009
-	- Improve debugging mode
-		- "-g" option is set implicitly in author's mode
-		- Set -DXS_ASSERT in author's mode (see XS::Assert)
-		- Set -Wdeclaration-after-statement in cc_warnings()
+    - Improve debugging mode
+        - "-g" option is set implicitly in author's mode
+        - Set -DXS_ASSERT in author's mode (see XS::Assert)
+        - Set -Wdeclaration-after-statement in cc_warnings()
 
 0.13 Wed Sep  2 17:59:04 2009
-	- fix RT #48738 and add tests on it
+    - fix RT #48738 and add tests on it
 
 0.12 Fri Aug 21 12:54:20 2009
-	- re-fix the algorithm to find functions again (RT #48797)
-	- refer to Module::Install::AuthorRequires
+    - re-fix the algorithm to find functions again (RT #48797)
+    - refer to Module::Install::AuthorRequires
 
 0.11 Wed Aug 19 16:15:33 2009
-	- re-fix the algorithm to find functions (RT #48797)
-	- remove -DDEBUGGING in '-g' option
+    - re-fix the algorithm to find functions (RT #48797)
+    - remove -DDEBUGGING in '-g' option
 
 0.10 Tue Aug 18 13:05:46 2009
-	- add '-g' command line option (perl Makefile.PL -g)
-		- avoid optimization (remove -Ox from OPTIMIZE)
-		- add -DDEBUGGING to DEFINE
-	- make the function finding algorithm more smart (fix RT #48738 in XS::MagicExt)
+    - add '-g' command line option (perl Makefile.PL -g)
+        - avoid optimization (remove -Ox from OPTIMIZE)
+        - add -DDEBUGGING to DEFINE
+    - make the function finding algorithm more smart (fix RT #48738 in XS::MagicExt)
 
 0.09 Thu Aug 13 22:27:20 2009
-	- fix a linking library issue on Cygwin
+    - fix a linking library issue on Cygwin
 
 0.08 Wed Aug 12 11:36:27 2009
-	- fix checklib algorithm
-	- enhance tests
+    - fix checklib algorithm
+    - enhance tests
 
 0.07 Tue Aug  4 17:02:32 2009
-	- apply a patch from RT #48321-2 (thanks to Taro Nishino)
+    - apply a patch from RT #48321-2 (thanks to Taro Nishino)
 
 0.06 Tue Aug  4 09:20:08 2009
-	- fix tests for Win32 (RT #48321-1 reported by Taro Nishino)
-	- add cc_define() command
+    - fix tests for Win32 (RT #48321-1 reported by Taro Nishino)
+    - add cc_define() command
 
 0.05 Mon Aug  3 16:55:20 2009
-	- fix the algorithm for searching headers and libs
+    - fix the algorithm for searching headers and libs
 
 0.04 Wed Jul 29 11:41:55 2009
-	- fix cc_append_to_ccflags() on non-Win32 system
-	- code refactering
+    - fix cc_append_to_ccflags() on non-Win32 system
+    - code refactering
 
 0.03 Tue Jul 28 12:05:42 2009
-	- May this work on Windows!
+    - May this work on Windows!
 
 0.02 Mon Jul 27 13:59:29 2009
-	- no 'provides' section for header files
-	- add rpository info
+    - no 'provides' section for header files
+    - add rpository info
 
 0.01 Sun Jul 26 09:52:01 2009
         - original version; created by Module::Setup
