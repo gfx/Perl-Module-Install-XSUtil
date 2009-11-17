@@ -79,12 +79,17 @@ sub _is_msvc{
     return $Config{cc} =~ /\A cl \b /xmsi;
 }
 
-sub cc_available {
-    local $@;
-    return eval{
-        require ExtUtils::CBuilder;
-        ExtUtils::CBuilder->new(quiet => 1)->have_compiler();
-    };
+{
+    my $cc_available;
+
+    sub cc_available {
+        return $cc_available if defined $cc_available;
+        local $@;
+        return $cc_available = eval{
+            require ExtUtils::CBuilder;
+            ExtUtils::CBuilder->new(quiet => 1)->have_compiler();
+        } ? 1 : 0;
+    }
 }
 
 sub use_ppport{
