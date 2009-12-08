@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.19 Tue Dec  8 10:35:19 2009
+    - Make cc_available recognize the '--pp' and '--xs' options
+
 0.18 Tue Nov 17 10:15:03 2009
     - Optimize cc_available() by caching its value
 
