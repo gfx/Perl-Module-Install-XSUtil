@@ -17,7 +17,7 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %ConfigureRequires = (
-    'ExtUtils::CBuilder' => 0.25, # for have_compiler()
+    'ExtUtils::CBuilder' => 0.21, # for have_compiler()
 );
 
 my %BuildRequires = (
