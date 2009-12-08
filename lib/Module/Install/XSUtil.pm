@@ -54,6 +54,7 @@ sub _xs_initialize{
         $self->requires(%Requires);
 
         $self->makemaker_args(OBJECT => '$(O_FILES)');
+        $self->clean_files('$(O_FILES)');
 
         if($self->_xs_debugging()){
             # override $Config{optimize}
