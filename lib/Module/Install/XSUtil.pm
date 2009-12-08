@@ -544,17 +544,13 @@ This document describes Module::Install::XSUtil version 0.18.
     # in Makefile.PL
     use inc::Module::Install;
 
-    # This is a special version of requires().
-    # If XS::SomeFeature provides header files,
-    # this will add its include paths into INC
-    requies_xs 'XS::SomeFeature';
+    # Enables C compiler warnings
+    cc_warnings;
 
     # Uses ppport.h
     # No need to include it. It's created here.
     use_ppport 3.19;
 
-    # Enables C compiler warnings, e.g. -Wall -Wextra
-    cc_warnings;
 
     # Sets C pre-processor macros.
     cc_define q{-DUSE_SOME_FEATURE=42};
@@ -568,6 +564,11 @@ This document describes Module::Install::XSUtil version 0.18.
     # Installs header files
     install_headers; # all the header files in @cc_include_paths
 
+    # This is a special version of requires().
+    # If XS::SomeFeature provides header files,
+    # this will add its include paths into INC
+    requies_xs 'XS::SomeFeature';
+
 
 =head1 DESCRIPTION
 
@@ -580,7 +581,9 @@ See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
 
 =head2 cc_available
 
-Returns true if a C compiler is available.
+Returns true if a C compiler is available. If one passes C<--xs> to
+F<Makefile.PL>, this command returns true, and If one passes C<--pp>,
+it returns false.
 
 This uses C<ExtUtils::CBuilder>.
 
