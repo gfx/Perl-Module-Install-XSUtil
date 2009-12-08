@@ -85,6 +85,16 @@ sub _is_msvc{
 
     sub cc_available {
         return $cc_available if defined $cc_available;
+
+        foreach my $arg(@ARGV){
+            if($arg eq '--pp'){
+                return $cc_available = 0;
+            }
+            elsif($arg eq '--xs'){
+                return $cc_available = 1;
+            }
+        }
+
         local $@;
         return $cc_available = eval{
             require ExtUtils::CBuilder;
