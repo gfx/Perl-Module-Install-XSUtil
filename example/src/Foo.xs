@@ -20,12 +20,19 @@ foo_is_ok(void){
 #endif
 }
 
+STATIC OPAnnotationGroup MYMODULE_ANNOTATIONS;
+
 MODULE = Foo	PACKAGE = Foo
 
 PROTOTYPES: DISABLE
 
 BOOT:
-	op_annotation_group_free(aTHX_ op_annotation_group_new());
+	MYMODULE_ANNOTATIONS = op_annotation_group_new();
+
+void
+END()
+CODE:
+    op_annotation_group_free(aTHX_ MYMODULE_ANNOTATIONS);
 
 bool
 foo_is_ok()
