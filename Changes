@@ -1,5 +1,11 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.20 Sat Jan  9 16:31:53 2010
+    - Change cc_warnings()
+        - Add -Wc++-compat on gcc 4
+        - Add -Wno-comment on gcc 3
+    - Remove ExtUtils::CBuilder dependency, use can_cc() instead
+
 0.19 Tue Dec  8 10:35:19 2009
     - Make cc_available recognize the '--pp' and '--xs' options
 
