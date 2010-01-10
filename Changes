@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.21 Sun Jan 10 15:22:20 2010
+    - Enable -Wc++-compat on gcc >= 4.1
+
 0.20 Sat Jan  9 16:31:53 2010
     - Change cc_warnings()
         - Add -Wc++-compat on gcc 4
