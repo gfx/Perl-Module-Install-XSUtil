@@ -141,8 +141,11 @@ sub cc_warnings{
         $self->cc_append_to_ccflags(qw(-Wall));
 
         no warnings 'numeric';
-        if($Config{gccversion} >= 4.00){
-            $self->cc_append_to_ccflags('-Wextra -Wdeclaration-after-statement -Wc++-compat');
+        if($Config{gccversion} >= 4.0){
+            $self->cc_append_to_ccflags('-Wextra -Wdeclaration-after-statement');
+            if($Config{gccversion} >= 4.1){
+                $self->cc_append_to_ccflags('-Wc++-compat');
+            }
         }
         else{
             $self->cc_append_to_ccflags('-W -Wno-comment');
