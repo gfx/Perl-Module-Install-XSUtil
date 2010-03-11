@@ -106,8 +106,9 @@ sub use_ppport{
 
     my $filename = 'ppport.h';
 
-    $dppp_version ||= 0;
+    $dppp_version ||= 3.19; # the more, the better
     $self->configure_requires('Devel::PPPort' => $dppp_version);
+    $self->build_requires('Devel::PPPort' => $dppp_version);
 
     print "Writing $filename\n";
 
@@ -680,7 +681,7 @@ L<ExtUtils::MakeMaker>.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2009, Goro Fuji (gfx). Some rights reserved.
+Copyright (c) 2009-2010, Goro Fuji (gfx). Some rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
