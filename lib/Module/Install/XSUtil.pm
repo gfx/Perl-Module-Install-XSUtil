@@ -53,16 +53,16 @@ sub _xs_initialize{
         $self->build_requires(%BuildRequires);
         $self->requires(%Requires);
 
-        $self->makemaker_args(OBJECT => '$(O_FILES)');
+        $self->makemaker_args->{OBJECT} = '$(O_FILES)';
         $self->clean_files('$(O_FILES)');
 
         if($self->_xs_debugging()){
             # override $Config{optimize}
             if(_is_msvc()){
-                $self->makemaker_args(OPTIMIZE => '-Zi');
+                $self->makemaker_args->{OPTIMIZE} = '-Zi';
             }
             else{
-                $self->makemaker_args(OPTIMIZE => '-g');
+                $self->makemaker_args->{OPTIMIZE} = '-g';
             }
             $self->cc_define('-DXS_ASSERT');
         }
