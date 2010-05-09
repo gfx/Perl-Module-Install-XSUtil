@@ -595,11 +595,18 @@ See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
 
 =head2 cc_available
 
-Returns true if a C compiler is available. If one passes C<--xs> to
-F<Makefile.PL>, this command returns true, and If one passes C<--pp>,
-it returns false.
+Returns true if a C compiler is available. YOU DO NOT NEED TO CALL
+THIS FUNCTION YOURSELF: it will be called for you when this module is 
+initialized, and your Makefile.PL process will exit with 0 status.
+Only explicitly call if you need to do some esoteric handling when
+no compiler is available (for example, when you have a pure perl alternative)
 
-This uses C<ExtUtils::CBuilder>.
+This function can also be used to distinguish if the user has explicitly
+asked for an XS or PurePerl version when running F<Makefile.PL>.
+If C<--xs> is specified C<cc_available> will return true, and if C<--pp> is
+passed, it will return false 
+
+This uses C<ExtUtils::CBuilder> internally.
 
 =head2 requires_xs $module => ?$version
 
