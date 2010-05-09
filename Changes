@@ -1,5 +1,12 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.23 Sun May  9 11:15:41 2010
+    - Setup clean_files for gcov output files (*.gcov, *.gcno, *.gcda)
+    - Add cc_libs() for MakeMaker's LIBS option (currently, it is just an
+      ailas to cc_append_libs())
+    - cc_append_libs (and then cc_libs) accepts raw arguments as
+      "cc_libs qw(-L/path/to/libs -lfoo)" (lestrrat++)
+
 0.22 Thu Mar 11 19:02:18 2010
     - Add Devel::PPPort to build_requires if needed
 
