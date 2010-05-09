@@ -55,6 +55,7 @@ sub _xs_initialize{
 
         $self->makemaker_args->{OBJECT} = '$(O_FILES)';
         $self->clean_files('$(O_FILES)');
+        $self->clean_files('*.stackdump') if $^O eq 'cygwin';
 
         if($self->_xs_debugging()){
             # override $Config{optimize}
