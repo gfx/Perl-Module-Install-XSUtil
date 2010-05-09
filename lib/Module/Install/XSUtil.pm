@@ -331,6 +331,11 @@ sub cc_src_paths{
         push @{$C_ref}, $c unless grep{ $_ eq $c } @{$C_ref};
     }
 
+    $self->clean_files(map{
+        File::Spec->catfile($_, '*.gcov'),
+        File::Spec->catfile($_, '*.gcda'),
+        File::Spec->catfile($_, '*.gcno'),
+    } @dirs);
     $self->cc_append_to_inc('.');
 
     return;
