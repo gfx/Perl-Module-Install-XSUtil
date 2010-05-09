@@ -395,7 +395,10 @@ sub install_headers{
         $ToInstall{$path} = File::Spec->join('$(INST_ARCHAUTODIR)', $ident);
 
         _verbose "install: $path as $ident" if _VERBOSE;
-        $self->_extract_functions_from_header_file($path);
+        my @funcs = $self->_extract_functions_from_header_file($path);
+        if(@funcs){
+            $self->cc_append_to_funclist(@funcs);
+        }
     }
 
     if(@not_found){
@@ -478,11 +481,7 @@ sub _extract_functions_from_header_file{
             }
     }
 
-    if(@functions){
-        $self->cc_append_to_funclist(@functions);
-    }
-
-    return;
+    return @functions;
 }
 
 
