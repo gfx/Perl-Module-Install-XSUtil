@@ -85,18 +85,26 @@ sub _is_msvc{
     my $cc_available;
 
     sub cc_available {
-        return $cc_available if defined $cc_available;
+        return defined $cc_available ?
+            $cc_available :
+            ($cc_available = shift->can_cc())
+        ;
+    }
+
+    my $want_xs;
+    sub want_xs {
+        my $default = @_ ? shift : 1; # you're using this module, you /must/ want XS by default
+        return $want_xs if defined $want_xs;
 
         foreach my $arg(@ARGV){
             if($arg eq '--pp'){
-                return $cc_available = 0;
+                return $want_xs = 0;
             }
             elsif($arg eq '--xs'){
-                return $cc_available = 1;
+                return $want_xs = 1;
             }
         }
-
-        return $cc_available = shift->can_cc();
+        return $want_xs = $default;
     }
 }
 
@@ -595,11 +603,23 @@ See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
 
 =head2 cc_available
 
-Returns true if a C compiler is available. If one passes C<--xs> to
-F<Makefile.PL>, this command returns true, and If one passes C<--pp>,
-it returns false.
+Returns true if a C compiler is available. YOU DO NOT NEED TO CALL
+THIS FUNCTION YOURSELF: it will be called for you when this module is 
+initialized, and your Makefile.PL process will exit with 0 status.
+Only explicitly call if you need to do some esoteric handling when
+no compiler is available (for example, when you have a pure perl alternative)
 
-This uses C<ExtUtils::CBuilder>.
+This uses C<ExtUtils::CBuilder> internally.
+
+=head2 want_xs ?$default
+
+Returns true if the user asked for the XS version or pure perl version of the
+module.
+
+Will return true if C<--xs> is explicitly specified as the argument to 
+F<Makefile.PL>, and false if C<--pp> is specified. If neither is explicitly
+specified, will return the value specified by C<$default>. If you do not
+specify the value of C<$default>, then it will be true.
 
 =head2 requires_xs $module => ?$version
 
