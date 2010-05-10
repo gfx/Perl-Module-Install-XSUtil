@@ -609,8 +609,6 @@ initialized, and your Makefile.PL process will exit with 0 status.
 Only explicitly call if you need to do some esoteric handling when
 no compiler is available (for example, when you have a pure perl alternative)
 
-This uses C<ExtUtils::CBuilder> internally.
-
 =head2 want_xs ?$default
 
 Returns true if the user asked for the XS version or pure perl version of the
