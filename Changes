@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.23_01 Mon May 10 12:10:59 2010
+    + Clarify docs (lestrrat)
+    + Add want_xs() command (lestrrat)
+
 0.23 Sun May  9 11:15:41 2010
     - Setup clean_files for gcov output files (*.gcov, *.gcno, *.gcda)
     - Add cc_libs() for MakeMaker's LIBS option (currently, it is just an
