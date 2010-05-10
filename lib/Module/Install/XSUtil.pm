@@ -706,6 +706,12 @@ No bugs have been reported.
 
 Please report any bugs or feature requests to the author.
 
+=head1 ACKNOWLEDGEMENT
+
+Thanks to Taro Nishino for the test reports.
+
+Tanks to lestrrat for the suggestions and patches.
+
 =head1 AUTHOR
 
 Goro Fuji (gfx) E<lt>gfuji(at)cpan.orgE<gt>.
