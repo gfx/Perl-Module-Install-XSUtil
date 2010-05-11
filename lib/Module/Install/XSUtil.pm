@@ -235,21 +235,26 @@ sub cc_append_to_libs{
 sub cc_assert_lib {
     my ($self, @dcl_args) = @_;
 
-    my $loaded_lib = 0;
-    foreach my $checklib qw(inc::Devel::CheckLib Devel::CheckLib) {
-        eval "use $checklib 0.4";
-        if (!$@) {
-            $loaded_lib = 1;
-            last;
+    if ( ! $self->{xsu_loaded_checklib} ) {
+        my $loaded_lib = 0;
+        foreach my $checklib qw(inc::Devel::CheckLib Devel::CheckLib) {
+            eval "use $checklib 0.4";
+            if (!$@) {
+                $loaded_lib = 1;
+                last;
+            }
         }
+
+        if (! $loaded_lib) {
+            warn "Devel::CheckLib not found in inc/ nor \@INC";
+            exit 0;
+        }
+
+        $self->{xsu_loaded_checklib}++;
+        $self->configure_requires( "Devel::CheckLib" => "0.4" );
+        $self->build_requires( "Devel::CheckLib" => "0.4" );
     }
 
-    if (! $loaded_lib) {
-        warn "Devel::CheckLib not found in inc/ nor \@INC";
-        exit 0;
-    }
-
-    my $mm = $self->makemaker_args;
     Devel::CheckLib::check_lib_or_exit(@dcl_args);
 }
 
