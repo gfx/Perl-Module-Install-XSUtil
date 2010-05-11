@@ -179,7 +179,6 @@ sub cc_append_to_inc{
     for my $dir(@dirs){
         unless(-d $dir){
             warn("'$dir' not found: $!\n");
-            return;
         }
 
         _verbose "inc: -I$dir" if _VERBOSE;
