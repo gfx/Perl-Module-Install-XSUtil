@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.23_01';
+$VERSION = '0.23_02';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -589,7 +589,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.23_01.
+This document describes Module::Install::XSUtil version 0.23_02.
 
 =head1 SYNOPSIS
 

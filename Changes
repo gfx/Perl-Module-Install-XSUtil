@@ -1,8 +1,15 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.23_02 Fri May 14 11:42:09 2010
+    - Don't exit if include dirs don't exist (lestrrat)
+    - Add cc_assert_lib() as an interface to Devel::CheckLib (lestrrat)
+    - Add want_xs() (lestrrat)
+    - Separate out detection of "-" and stuff to cc_libs(), and let
+      cc_append_to_lib()s just be a simple function (lestrrat)
+
 0.23_01 Mon May 10 12:10:59 2010
-    + Clarify docs (lestrrat)
-    + Add want_xs() command (lestrrat)
+    - Clarify docs (lestrrat)
+    - Add want_xs() command (lestrrat)
 
 0.23 Sun May  9 11:15:41 2010
     - Setup clean_files for gcov output files (*.gcov, *.gcno, *.gcda)
