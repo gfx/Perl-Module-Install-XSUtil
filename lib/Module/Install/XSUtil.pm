@@ -217,18 +217,44 @@ sub cc_append_to_libs{
         else {
             $lib = '';
         }
-        $lib .= ($name =~ /^-/ ? qq{$name } : qq{-l$name});
+        $lib .= ($name =~ /^-/ ? qq{$name} : qq{-l$name});
         _verbose "libs: $lib" if _VERBOSE;
         $lib;
     } @libs;
 
-    if($mm->{LIBS}){
+    if ($mm->{LIBS}){
         $mm->{LIBS} .= q{ } . $libs;
     }
     else{
         $mm->{LIBS} = $libs;
     }
     return $libs;
+}
+
+sub cc_assert_lib {
+    my ($self, @dcl_args) = @_;
+
+    if ( ! $self->{xsu_loaded_checklib} ) {
+        my $loaded_lib = 0;
+        foreach my $checklib qw(inc::Devel::CheckLib Devel::CheckLib) {
+            eval "use $checklib 0.4";
+            if (!$@) {
+                $loaded_lib = 1;
+                last;
+            }
+        }
+
+        if (! $loaded_lib) {
+            warn "Devel::CheckLib not found in inc/ nor \@INC";
+            exit 0;
+        }
+
+        $self->{xsu_loaded_checklib}++;
+        $self->configure_requires( "Devel::CheckLib" => "0.4" );
+        $self->build_requires( "Devel::CheckLib" => "0.4" );
+    }
+
+    Devel::CheckLib::check_lib_or_exit(@dcl_args);
 }
 
 sub cc_append_to_ccflags{
@@ -656,6 +682,12 @@ e.g.:
     cc_libs -lfoo;
     cc_libs  'foo'; # ditto.
     cc_libs qw(-L/path/to/libs foo bar); # with library paths
+
+=head2 cc_assert_lib %args
+
+Checks if the given C library is installed via Devel::CheckLib. 
+Takes exactly what Devel::CheckLib takes. Note that you must pass
+the path names explicitly.
 
 =head2 install_headers ?@header_files
 
