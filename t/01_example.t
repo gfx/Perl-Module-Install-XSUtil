@@ -7,9 +7,16 @@ use FindBin qw($Bin);
 use File::Spec;
 use Config;
 use File::Find;
+use File::Copy qw(copy);
 
 my $dist_dir = File::Spec->join($Bin, '..', 'example');
 chdir $dist_dir or die "Cannot chdir to $dist_dir: $!";
+
+# workaround subdir auto-building :(
+copy "MyMakefile.PL" => "Makefile.PL";
+END {
+    unlink 'Makefile.PL';
+}
 
 my $make = $Config{make};
 

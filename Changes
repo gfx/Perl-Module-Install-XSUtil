@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.24 Sun May 16 13:24:58 2010
+    - Compliant with Module::Install 0.97
+
 0.23_02 Fri May 14 11:42:09 2010
     - Don't exit if include dirs don't exist (lestrrat)
     - Add cc_assert_lib() as an interface to Devel::CheckLib (lestrrat)
