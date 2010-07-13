@@ -5,6 +5,7 @@ use strict;
 use FindBin qw($Bin);
 use File::Spec;
 use lib File::Spec->join($Bin, '..', 'lib');
+use Config;
 
 use inc::Module::Install;
 
@@ -19,6 +20,8 @@ requires_xs 'B::Hooks::OP::Annotation'; # for testing only
 use_ppport 3.19;
 
 cc_warnings;
+
+requires_c99 if $Config{gccversion};
 
 cc_include_paths 'include';
 cc_src_paths     'src';

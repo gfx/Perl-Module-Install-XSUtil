@@ -171,6 +171,40 @@ sub cc_warnings{
     return;
 }
 
+sub requires_c99 {
+    my($self) = @_;
+    $self->_xs_initialize();
+
+    require File::Temp;
+    require File::Basename;
+
+    my $tmpfile = File::Temp->new(SUFFIX => '.c');
+
+    $tmpfile->print(<<'C99');
+inline // a C99 keyword with C99 style comments
+int test_c99() {
+    int i = 0;
+    i++;
+    int j = i - 1; // another C99 feature: declaration after statement
+    return j;
+}
+C99
+
+    $tmpfile->close();
+
+    system $Config{cc}, '-c', $tmpfile->filename;
+
+    if($? != 0) {
+        warn("This compiler ($Config{cc}) seems not to support C99, stopped.\n");
+        exit(0);
+    }
+
+    (my $objname = File::Basename::basename($tmpfile->filename)) =~ s/\Q.c\E$/$Config{_o}/;
+    unlink $objname or warn "Cannot unlink $objname (ignored): $!";
+
+    return;
+}
+
 sub cc_append_to_inc{
     my($self, @dirs) = @_;
 
@@ -338,7 +372,7 @@ sub requires_xs{
     $self->cc_append_to_inc (grep{ !$uniq{ $_ }++ } @inc);
 
     %uniq = ();
-    $self->cc_append_to_libs(grep{ !$uniq{ $_->[0] }++ } @libs);
+    $self->cc_libs(grep{ !$uniq{ $_->[0] }++ } @libs);
 
     return %added;
 }
@@ -693,6 +727,10 @@ e.g.:
 Checks if the given C library is installed via Devel::CheckLib. 
 Takes exactly what Devel::CheckLib takes. Note that you must pass
 the path names explicitly.
+
+=head2 requires_c99
+
+Checks if the C compiler supports C99 features.
 
 =head2 install_headers ?@header_files
 
