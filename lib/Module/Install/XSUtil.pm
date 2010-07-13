@@ -45,8 +45,8 @@ sub _xs_initialize{
         $self->{xsu_initialized} = 1;
 
         if(!$self->cc_available()){
-            print "This package requires a C compiler, but it's not available.\n";
-            exit(0);
+            warn "This distribution requires a C compiler, but it's not available, stopped.\n";
+            exit;
         }
 
         $self->configure_requires(%ConfigureRequires);
@@ -171,7 +171,7 @@ sub cc_warnings{
     return;
 }
 
-sub requires_c99 {
+sub c99_available {
     my($self) = @_;
     $self->_xs_initialize();
 
@@ -194,14 +194,18 @@ C99
 
     system $Config{cc}, '-c', $tmpfile->filename;
 
-    if($? != 0) {
-        warn("This compiler ($Config{cc}) seems not to support C99, stopped.\n");
-        exit(0);
-    }
-
     (my $objname = File::Basename::basename($tmpfile->filename)) =~ s/\Q.c\E$/$Config{_o}/;
     unlink $objname or warn "Cannot unlink $objname (ignored): $!";
 
+    return $? == 0;
+}
+
+sub requires_c99 {
+    my($self) = @_;
+    if(!$self->c99_available) {
+        warn "This distribution requires a C99 compiler, but $Config{cc} seems not to support C99, stopped.\n";
+        exit;
+    }
     return;
 }
 
