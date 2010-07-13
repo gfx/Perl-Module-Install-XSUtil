@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.25 Tue Jul 13 19:43:34 2010
+    - Add requires_c99() to assert that the compiler supports C99
+    - Fix Win32 problems, hopefully
+
 0.24 Sun May 16 13:24:58 2010
     - Compliant with Module::Install 0.97
 
