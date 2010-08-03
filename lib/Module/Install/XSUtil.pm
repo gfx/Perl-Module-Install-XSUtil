@@ -13,6 +13,7 @@ use Config;
 
 use File::Spec;
 use File::Find;
+use File::Which qw(which);
 
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
@@ -141,6 +142,13 @@ sub use_ppport{
     return;
 }
 
+sub _gccversion {
+    my $gcc = which('gcc') or return 0; # suppress wargings
+    my $res = `$gcc --version`;
+    my ($version) = $res =~ /\(GCC\) ([0-9.]+)/;
+    return $version || 0;
+}
+
 sub cc_warnings{
     my($self) = @_;
 
@@ -151,9 +159,10 @@ sub cc_warnings{
         $self->cc_append_to_ccflags(qw(-Wall));
 
         no warnings 'numeric';
-        if($Config{gccversion} >= 4.0){
+        my $gccversion = _gccversion();
+        if($gccversion >= 4.0){
             $self->cc_append_to_ccflags('-Wextra -Wdeclaration-after-statement');
-            if($Config{gccversion} >= 4.1){
+            if($gccversion >= 4.1){
                 $self->cc_append_to_ccflags('-Wc++-compat');
             }
         }
