@@ -5,7 +5,6 @@ use inc::Module::Install;
 all_from 'lib/Module/Install/XSUtil.pm';
 
 requires 'Module::Install' => 0.91;
-requires 'File::Which' => 1.09;
 
 test_requires 'Test::More' => 0.88;
 

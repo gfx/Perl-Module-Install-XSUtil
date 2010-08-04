@@ -13,7 +13,6 @@ use Config;
 
 use File::Spec;
 use File::Find;
-use File::Which qw(which);
 
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
@@ -143,8 +142,7 @@ sub use_ppport{
 }
 
 sub _gccversion {
-    my $gcc = which('gcc') or return 0; # suppress wargings
-    my $res = `$gcc --version`;
+    my $res = `$Config{cc} --version`;
     my ($version) = $res =~ /\(GCC\) ([0-9.]+)/;
     return $version || 0;
 }
