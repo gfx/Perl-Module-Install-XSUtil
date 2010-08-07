@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.26 Sat Aug  7 17:47:37 2010
+    - Use the version of installed gcc, not $Config{gccversion} (xaicron)
+
 0.25 Tue Jul 13 19:43:34 2010
     - Add requires_c99() to assert that the compiler supports C99
     - Fix Win32 problems, hopefully
