@@ -180,6 +180,9 @@ sub cc_warnings{
 
 sub c99_available {
     my($self) = @_;
+
+    return 0 if not $self->cc_available();
+
     require File::Temp;
     require File::Basename;
 
@@ -683,6 +686,10 @@ THIS FUNCTION YOURSELF: it will be called for you when this module is
 initialized, and your Makefile.PL process will exit with 0 status.
 Only explicitly call if you need to do some esoteric handling when
 no compiler is available (for example, when you have a pure perl alternative)
+
+=head2 c99_available
+
+Returns true if a C compiler is available and it supports C99 features.
 
 =head2 want_xs ?$default
 
