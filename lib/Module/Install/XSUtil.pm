@@ -180,8 +180,6 @@ sub cc_warnings{
 
 sub c99_available {
     my($self) = @_;
-    $self->_xs_initialize();
-
     require File::Temp;
     require File::Basename;
 
@@ -213,6 +211,8 @@ sub requires_c99 {
         warn "This distribution requires a C99 compiler, but $Config{cc} seems not to support C99, stopped.\n";
         exit;
     }
+    $self->_xs_initialize();
+
     return;
 }
 
