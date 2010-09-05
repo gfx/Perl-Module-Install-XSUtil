@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.27 Sun Sep  5 11:47:03 2010
+    - c99_available() should not have any side effects (reported by makamaka)
+
 0.26 Sat Aug  7 17:47:37 2010
     - Use the version of installed gcc, not $Config{gccversion} (xaicron)
 
