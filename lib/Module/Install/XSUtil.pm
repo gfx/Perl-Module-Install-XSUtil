@@ -144,7 +144,8 @@ sub use_ppport{
 sub _gccversion {
     my $res = `$Config{cc} --version`;
     my ($version) = $res =~ /\(GCC\) ([0-9.]+)/;
-    return $version || 0;
+    no warnings 'numeric', 'uninitialized';
+    return sprintf '%g', $version;
 }
 
 sub cc_warnings{
@@ -153,23 +154,23 @@ sub cc_warnings{
     $self->_xs_initialize();
 
     if(_is_gcc()){
-        # Note: MSVC++ doesn't support C99, so -Wdeclaration-after-statement helps ensure C89 specs.
         $self->cc_append_to_ccflags(qw(-Wall));
 
-        no warnings 'numeric';
         my $gccversion = _gccversion();
         if($gccversion >= 4.0){
-            $self->cc_append_to_ccflags('-Wextra -Wdeclaration-after-statement');
-            if($gccversion >= 4.1){
-                $self->cc_append_to_ccflags('-Wc++-compat');
+            # Note: MSVC++ doesn't support C99, so -Wdeclaration-after-statement helps
+            # ensure C89 specs.
+            $self->cc_append_to_ccflags(qw(-Wextra -Wdeclaration-after-statement));
+            if($gccversion >= 4.1) {
+                $self->cc_append_to_ccflags(qw(-Wc++-compat));
             }
         }
         else{
-            $self->cc_append_to_ccflags('-W -Wno-comment');
+            $self->cc_append_to_ccflags(qw(-W -Wno-comment));
         }
     }
     elsif(_is_msvc()){
-        $self->cc_append_to_ccflags('-W3');
+        $self->cc_append_to_ccflags(qw(-W3));
     }
     else{
         # TODO: support other compilers
