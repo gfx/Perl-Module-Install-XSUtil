@@ -18,6 +18,7 @@ all_from 'lib/Foo.pm';
 requires_xs 'B::Hooks::OP::Annotation'; # for testing only
 
 use_ppport 3.19;
+use_xshelper;
 
 cc_warnings;
 
