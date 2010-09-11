@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.30 Sat Sep 11 14:17:06 2010
+    - Add use_xshelper() command to create xshelper.h
+
 0.27 Sun Sep  5 11:47:03 2010
     - c99_available() should not have any side effects (reported by makamaka)
 
