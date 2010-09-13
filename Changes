@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.31 Mon Sep 13 13:09:16 2010
+    - Fix a check for STATIC_INLINE (s/__cplusplus__/__cplusplus/)
+
 0.30 Sat Sep 11 14:17:06 2010
     - Add use_xshelper() command to create xshelper.h
 
