@@ -614,12 +614,12 @@ sub _xshelper_h {
 :/*
 :=head1 NAME
 :
-:perlxs.h - Helper C header file for XS modules
+:xshelper.h - Helper C header file for XS modules
 :
 :=head1 DESCRIPTION
 :
 :    // This includes all the perl header files and ppport.h
-:    #include "perlxs.h"
+:    #include "xshelper.h"
 :
 :=head1 SEE ALSO
 :
@@ -627,7 +627,7 @@ sub _xshelper_h {
 :
 :=head1 AUTHOR
 :
-:Fuji, Goro (gfx)
+:Fuji, Goro (gfx) E<lt>gfuji at cpan.orgE<gt>
 :
 :=head1 LISENCE
 :
@@ -950,7 +950,7 @@ L<ExtUtils::MakeMaker>.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2009-2010, Goro Fuji (gfx). Some rights reserved.
+Copyright (c) 2009-2010, Goro Fuji (gfx). All rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
