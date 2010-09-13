@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.32 Mon Sep 13 14:18:33 2010
+    - Don't clean xshelper.h by default.
+      Use use_xshelper -clean (or -realclean) to clean the file.
+
 0.31 Mon Sep 13 13:09:16 2010
     - Fix a check for STATIC_INLINE (s/__cplusplus__/__cplusplus/)
 
