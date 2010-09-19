@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.32';
+$VERSION = '0.33';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -29,6 +29,9 @@ my %Requires = (
 );
 
 my %ToInstall;
+
+my $UseC99       = 0;
+my $UseCplusplus = 0;
 
 sub _verbose{
     print STDERR q{# }, @_, "\n";
@@ -179,10 +182,12 @@ sub cc_warnings{
 
         my $gccversion = _gccversion();
         if($gccversion >= 4.0){
-            # Note: MSVC++ doesn't support C99, so -Wdeclaration-after-statement helps
+            # Note: MSVC++ doesn't support C99,
+            # so -Wdeclaration-after-statement helps
             # ensure C89 specs.
-            $self->cc_append_to_ccflags(qw(-Wextra -Wdeclaration-after-statement));
-            if($gccversion >= 4.1) {
+            $self->cc_append_to_ccflags(qw(-Wdeclaration-after-statement));
+            $self->cc_append_to_ccflags(qw(-Wextra));
+            if($gccversion >= 4.1 && !$UseCplusplus) {
                 $self->cc_append_to_ccflags(qw(-Wc++-compat));
             }
         }
@@ -237,7 +242,7 @@ sub requires_c99 {
         exit;
     }
     $self->_xs_initialize();
-
+    $UseC99 = 1;
     return;
 }
 
@@ -765,7 +770,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.32.
+This document describes Module::Install::XSUtil version 0.33.
 
 =head1 SYNOPSIS
 

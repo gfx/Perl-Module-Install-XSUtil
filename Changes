@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.33 Sun Sep 19 22:15:10 2010
+    - Disable -Wdeclaration-after-statement by requires_c99()
+
 0.32 Mon Sep 13 14:18:33 2010
     - Don't clean xshelper.h by default.
       Use use_xshelper -clean (or -realclean) to clean the file.
