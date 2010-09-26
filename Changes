@@ -1,5 +1,8 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.34 Sun Sep 26 12:18:18 2010
+    - Oops! The change in 0.33 did not work.
+
 0.33 Sun Sep 19 22:15:10 2010
     - Disable -Wdeclaration-after-statement by requires_c99()
 
