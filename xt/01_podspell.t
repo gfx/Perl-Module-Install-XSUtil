@@ -19,3 +19,6 @@ Module::Install::XSUtil
 Nishino
 lestrrat
 ACKNOWLEDGEMENT
+XS
+RT
+co
