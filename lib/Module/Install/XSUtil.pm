@@ -660,7 +660,6 @@ sub _xshelper_h {
 :
 :#define PERL_NO_GET_CONTEXT /* we want efficiency */
 :#include <EXTERN.h>
-:
 :#include <perl.h>
 :#define NO_XSLOCKS /* for exceptions */
 :#include <XSUB.h>
@@ -686,8 +685,8 @@ sub _xshelper_h {
 :#endif
 :
 :#ifndef LIKELY /* they are just a compiler's hint */
-:#define LIKELY(x)   (x)
-:#define UNLIKELY(x) (x)
+:#define LIKELY(x)   (!!(x))
+:#define UNLIKELY(x) (!!(x))
 :#endif
 :
 :#ifndef newSVpvs_share
@@ -717,8 +716,10 @@ sub _xshelper_h {
 :#define LooksLikeNumber(x) (SvPOKp(x) ? looks_like_number(x) : (I32)SvNIOKp(x))
 :#endif
 :
-:#define newAV_mortal() (AV*)sv_2mortal((SV*)newAV())
-:#define newHV_mortal() (HV*)sv_2mortal((SV*)newHV())
+:#define newAV_mortal()         (AV*)sv_2mortal((SV*)newAV())
+:#define newHV_mortal()         (HV*)sv_2mortal((SV*)newHV())
+:#define newRV_inc_mortal(sv)   sv_2mortal(newRV_inc(sv))
+:#define newRV_noinc_mortal(sv) sv_2mortal(newRV_noinc(sv))
 :
 :#define DECL_BOOT(name) EXTERN_C XS(CAT2(boot_, name))
 :#define CALL_BOOT(name) STMT_START {            \
