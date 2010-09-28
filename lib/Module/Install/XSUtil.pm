@@ -318,7 +318,7 @@ sub cc_assert_lib {
 
     if ( ! $self->{xsu_loaded_checklib} ) {
         my $loaded_lib = 0;
-        foreach my $checklib qw(inc::Devel::CheckLib Devel::CheckLib) {
+        foreach my $checklib (qw(inc::Devel::CheckLib Devel::CheckLib)) {
             eval "use $checklib 0.4";
             if (!$@) {
                 $loaded_lib = 1;
@@ -554,7 +554,8 @@ sub _extract_functions_from_header_file{
         $cppflags   .= ' ' . $mm->{DEFINE} if $mm->{DEFINE};
 
         my $add_include = _is_msvc() ? '-FI' : '-include';
-        $cppflags   .= ' ' . join ' ', map{ qq{$add_include "$_"} } qw(EXTERN.h perl.h XSUB.h);
+        $cppflags   .= ' ' . join ' ',
+            map{ qq{$add_include "$_"} } qw(EXTERN.h perl.h XSUB.h);
 
         my $cppcmd = qq{$Config{cpprun} $cppflags $h_file};
 
