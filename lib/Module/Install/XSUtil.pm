@@ -806,7 +806,7 @@ This document describes Module::Install::XSUtil version 0.35.
     # This is a special version of requires().
     # If XS::SomeFeature provides header files,
     # this will add its include paths into INC
-    requies_xs 'XS::SomeFeature';
+    requires_xs 'XS::SomeFeature';
 
 
 =head1 DESCRIPTION
