@@ -231,7 +231,7 @@ C99
 
     $tmpfile->close();
 
-    system $Config{cc}, '-c', $tmpfile->filename;
+    system "$Config{cc} -c " . $tmpfile->filename;
 
     (my $objname = File::Basename::basename($tmpfile->filename)) =~ s/\Q.c\E$/$Config{_o}/;
     unlink $objname or warn "Cannot unlink $objname (ignored): $!";
