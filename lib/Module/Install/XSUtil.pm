@@ -96,10 +96,12 @@ sub _is_msvc{
 
     my $want_xs;
     sub want_xs {
-        my $default = @_ ? shift : !$ENV{PERL_ONLY};
-        # you're using this module, you /must/ want XS by default
-
+        my($self, $default) = @_;
         return $want_xs if defined $want_xs;
+
+        # you're using this module, you must want XS by default
+        # unless PERL_ONLY is true.
+        $default = !$ENV{PERL_ONLY} if not defined $default;
 
         foreach my $arg(@ARGV){
             if($arg eq '--pp'){
