@@ -66,7 +66,7 @@ sub _xs_initialize{
                 $self->makemaker_args->{OPTIMIZE} = '-Zi';
             }
             else{
-                $self->makemaker_args->{OPTIMIZE} = '-g -gdb';
+                $self->makemaker_args->{OPTIMIZE} = '-g -ggdb -g3';
             }
             $self->cc_define('-DXS_ASSERT');
         }
