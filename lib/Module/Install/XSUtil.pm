@@ -25,7 +25,7 @@ my %BuildRequires = (
 );
 
 my %Requires = (
-    'XSLoader' => 0.10, # the newer, the better
+    'XSLoader' => 0.02,
 );
 
 my %ToInstall;
@@ -66,7 +66,7 @@ sub _xs_initialize{
                 $self->makemaker_args->{OPTIMIZE} = '-Zi';
             }
             else{
-                $self->makemaker_args->{OPTIMIZE} = '-g';
+                $self->makemaker_args->{OPTIMIZE} = '-g -gdb';
             }
             $self->cc_define('-DXS_ASSERT');
         }
@@ -821,7 +821,7 @@ See L<XS::MRO::Compat> and L<Method::Cumulative> for example.
 =head2 cc_available
 
 Returns true if a C compiler is available. YOU DO NOT NEED TO CALL
-THIS FUNCTION YOURSELF: it will be called for you when this module is 
+THIS FUNCTION YOURSELF: it will be called for you when this module is
 initialized, and your Makefile.PL process will exit with 0 status.
 Only explicitly call if you need to do some esoteric handling when
 no compiler is available (for example, when you have a pure perl alternative)
@@ -835,7 +835,7 @@ Returns true if a C compiler is available and it supports C99 features.
 Returns true if the user asked for the XS version or pure perl version of the
 module.
 
-Will return true if C<--xs> is explicitly specified as the argument to 
+Will return true if C<--xs> is explicitly specified as the argument to
 F<Makefile.PL>, and false if C<--pp> is specified. If neither is explicitly
 specified, will return the value specified by C<$default>. If you do not
 specify the value of C<$default>, then it will be true.
@@ -892,7 +892,7 @@ e.g.:
 
 =head2 cc_assert_lib %args
 
-Checks if the given C library is installed via Devel::CheckLib. 
+Checks if the given C library is installed via Devel::CheckLib.
 Takes exactly what Devel::CheckLib takes. Note that you must pass
 the path names explicitly.
 
