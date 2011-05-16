@@ -96,7 +96,9 @@ sub _is_msvc{
 
     my $want_xs;
     sub want_xs {
-        my $default = @_ ? shift : 1; # you're using this module, you /must/ want XS by default
+        my $default = @_ ? shift : !$ENV{PERL_ONLY};
+        # you're using this module, you /must/ want XS by default
+
         return $want_xs if defined $want_xs;
 
         foreach my $arg(@ARGV){
