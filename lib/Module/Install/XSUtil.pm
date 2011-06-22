@@ -564,7 +564,10 @@ sub _extract_functions_from_header_file{
             map{ qq{$add_include "$_"} } qw(EXTERN.h perl.h XSUB.h);
 
         my $cppcmd = qq{$Config{cpprun} $cppflags $h_file};
-
+        # remove all the -arch options to workaround gcc errors:
+        #       "-E, -S, -save-temps and -M options are not allowed
+        #        with multiple -arch flags"
+        $cppcmd =~ s/ -arch \s* \S+ //xmsg;
         _verbose("extract functions from: $cppcmd") if _VERBOSE;
         `$cppcmd`;
     };
