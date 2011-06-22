@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.38 2011-06-22 15:15:37
+    - Workaround MacOSX's system perl failure caused by multiple -arch
+      for gcc (thanks to @kazuho)
+
 0.37 2011-05-16 23:33:49
     - Makefile.PL -g implices "-g -ggdb -g3" for gcc (EXPERIMENTAL)
     - PERL_ONLY=1 means --pp for modules with XS/PP dual backends
