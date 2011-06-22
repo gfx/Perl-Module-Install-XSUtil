@@ -1,4 +1,4 @@
-#!perl -w
+#!perl
 use strict;
 use inc::Module::Install;
 
