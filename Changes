@@ -1,5 +1,10 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.39 2011-08-22 11:28:15
+    - Add cc_inc_paths() as an alias to cc_include_paths()
+    - Add requires_cplusplus() as an experimental feature;
+      currently it chnages only warnings flags
+
 0.38 2011-06-22 15:15:37
     - Workaround MacOSX's system perl failure caused by multiple -arch
       for gcc (thanks to @kazuho)
