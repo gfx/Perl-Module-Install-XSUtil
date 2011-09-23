@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.40 2011-09-24 00:56:33
+    - ExtUtils::ParseXS is now configure_requires, instead of
+      build_requires (xaicron++)
+
 0.39 2011-08-22 11:28:15
     - Add cc_inc_paths() as an alias to cc_include_paths()
     - Add requires_cplusplus() as an experimental feature;
