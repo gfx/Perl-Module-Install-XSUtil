@@ -17,11 +17,10 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %ConfigureRequires = (
-    # currently nothing
+    'ExtUtils::ParseXS' => 2.21,
 );
 
 my %BuildRequires = (
-    'ExtUtils::ParseXS' => 2.21, # the newer, the better
 );
 
 my %Requires = (
