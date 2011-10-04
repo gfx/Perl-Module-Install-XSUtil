@@ -2,7 +2,7 @@ package Module::Install::XSUtil;
 
 use 5.005_03;
 
-$VERSION = '0.40';
+$VERSION = '0.41';
 
 use Module::Install::Base;
 @ISA     = qw(Module::Install::Base);
@@ -457,9 +457,10 @@ sub cc_src_paths{
         }
     }, @dirs);
 
+    my $xs_to = $UseCplusplus ? '.cpp' : '.c';
     foreach my $src_file(@src_files){
         my $c = $src_file;
-        if($c =~ s/ \.xs \z/.c/xms){
+        if($c =~ s/ \.xs \z/$xs_to/xms){
             $XS_ref->{$src_file} = $c;
 
             _verbose "xs: $src_file" if _VERBOSE;
@@ -757,7 +758,7 @@ package
     MY;
 
 # XXX: We must append to PM inside ExtUtils::MakeMaker->new().
-sub init_PM{
+sub init_PM {
     my $self = shift;
 
     $self->SUPER::init_PM(@_);
@@ -784,6 +785,21 @@ sub const_cccmd {
 
     return $cccmd
 }
+
+sub xs_c {
+    my($self) = @_;
+    my $mm = $self->SUPER::xs_c();
+    $mm =~ s/ \.c /.cpp/xmsg if $UseCplusplus;
+    return $mm;
+}
+
+sub xs_o {
+    my($self) = @_;
+    my $mm = $self->SUPER::xs_o();
+    $mm =~ s/ \.c /.cpp/xmsg if $UseCplusplus;
+    return $mm;
+}
+
 1;
 __END__
 
@@ -795,7 +811,7 @@ Module::Install::XSUtil - Utility functions for XS modules
 
 =head1 VERSION
 
-This document describes Module::Install::XSUtil version 0.40.
+This document describes Module::Install::XSUtil version 0.41.
 
 =head1 SYNOPSIS
 
@@ -926,8 +942,6 @@ Tells the build system to use C99 features.
 =head2 requires_cplusplus
 
 Tells the build system to use C++ language.
-
-This is experimental. Only warnings flags are changed by this command.
 
 =head2 install_headers ?@header_files
 

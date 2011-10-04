@@ -11,5 +11,6 @@ Makefile*
 *blib
 META.yml
 MYMETA.yml
+MYMETA.json
 inc/
 MANIFEST
