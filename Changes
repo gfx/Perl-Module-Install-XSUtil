@@ -1,5 +1,9 @@
 Revision history for Perl extension Module::Install::XSUtil
 
+0.42 2011-10-19 20:00:07
+    - Remove cc_inc_paths, which is already defined in M::I
+      (thanks to @shohex)
+
 0.41 2011-10-04 12:05:54
     - Complete support for requires_cplusplus()
 
