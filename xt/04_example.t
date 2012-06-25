@@ -22,6 +22,7 @@ my $make = $Config{make};
 
 my $out;
 
+note "$^X Makefile.PL";
 ok($out = `$^X Makefile.PL`, "$^X Makefile.PL");
 is $?, 0, '... success' or diag $out;
 

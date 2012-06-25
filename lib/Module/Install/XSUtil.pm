@@ -382,7 +382,7 @@ sub cc_define{
     return;
 }
 
-sub requires_xs{
+sub requires_xs_module {
     my $self  = shift;
 
     return $self->requires() unless @_;
@@ -836,11 +836,6 @@ This document describes Module::Install::XSUtil version 0.42.
     # Installs header files
     install_headers; # all the header files in @cc_include_paths
 
-    # This is a special version of requires().
-    # If XS::SomeFeature provides header files,
-    # this will add its include paths into INC
-    requires_xs 'XS::SomeFeature';
-
 
 =head1 DESCRIPTION
 
@@ -873,10 +868,6 @@ F<Makefile.PL>, and false if C<--pp> is specified. If neither is explicitly
 specified, will return the value specified by C<$default>. If you do not
 specify the value of C<$default>, then it will be true.
 
-=head2 requires_xs $module => ?$version
-
-Does C<requires()> and setup B<include paths> and B<libraries>
-for what I<$module> provides.
 
 =head2 use_ppport ?$version
 
