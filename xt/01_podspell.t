@@ -2,14 +2,9 @@
 
 use strict;
 use Test::More;
+use Test::Spellunker v0.2.1;
 
-eval q{ use Test::Spelling };
-
-plan skip_all => q{Test::Spelling is not installed.}
-	if $@;
-
-add_stopwords(map { split /[\s\:\-]/ } <DATA>);
-$ENV{LANG} = 'C';
+load_dictionary(\*DATA);
 all_pod_files_spelling_ok('lib');
 
 __DATA__
@@ -22,3 +17,4 @@ ACKNOWLEDGEMENT
 XS
 RT
 co
+realclean
