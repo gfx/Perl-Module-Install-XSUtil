@@ -93,6 +93,7 @@ sub _is_msvc{
         ;
     }
 
+    # cf. https://github.com/sjn/toolchain-site/blob/219db464af9b2f19b04fec05547ac10180a469f3/lancaster-consensus.md
     my $want_xs;
     sub want_xs {
         my($self, $default) = @_;
@@ -103,13 +104,26 @@ sub _is_msvc{
         $default = !$ENV{PERL_ONLY} if not defined $default;
 
         foreach my $arg(@ARGV){
-            if($arg eq '--pp'){
+
+            my ($k, $v) = split '=', $arg; # MM-style named args
+            if ($k eq 'PUREPERL_ONLY' && $v) {
+                return $want_xs = 0;
+            }
+            elsif($arg eq '--pp'){ # old-style
                 return $want_xs = 0;
             }
             elsif($arg eq '--xs'){
                 return $want_xs = 1;
             }
         }
+
+        if ($ENV{PERL_MM_OPT}) {
+            my($pp) = $ENV{PERL_MM_OPT} =~ /\b PUREPERL_ONLY = (\S+) /xms;
+            if ($pp) {
+                return $want_xs = 0;
+            }
+        }
+
         return $want_xs = $default;
     }
 }
