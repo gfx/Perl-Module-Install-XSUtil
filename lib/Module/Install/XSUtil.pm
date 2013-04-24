@@ -102,11 +102,11 @@ sub _is_msvc{
         # unless PERL_ONLY is true.
         $default = !$ENV{PERL_ONLY} if not defined $default;
 
-        foreach my $arg(@ARGV){
-            if($arg eq '--pp'){
+        foreach my $arg(split(' ', $ENV{PERL_MM_OPT} || ''), @ARGV){
+            if($arg eq '--pp' or $arg eq 'PUREPERL_ONLY=1'){
                 return $want_xs = 0;
             }
-            elsif($arg eq '--xs'){
+            elsif($arg eq '--xs' or $arg eq 'PUREPERL_ONLY=0'){
                 return $want_xs = 1;
             }
         }
