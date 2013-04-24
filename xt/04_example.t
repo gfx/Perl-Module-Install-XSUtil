@@ -1,7 +1,7 @@
 #!perl -w
 
 use strict;
-use Test::More;
+use Test::More skip_all => 'no longer maintained';
 
 use FindBin qw($Bin);
 use File::Spec;
