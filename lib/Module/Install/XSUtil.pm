@@ -106,8 +106,8 @@ sub _is_msvc{
         foreach my $arg(@ARGV){
 
             my ($k, $v) = split '=', $arg; # MM-style named args
-            if ($k eq 'PUREPERL_ONLY' && $v) {
-                return $want_xs = 0;
+            if ($k eq 'PUREPERL_ONLY' && defined $v) {
+                return $want_xs = !$v;
             }
             elsif($arg eq '--pp'){ # old-style
                 return $want_xs = 0;
@@ -118,9 +118,9 @@ sub _is_msvc{
         }
 
         if ($ENV{PERL_MM_OPT}) {
-            my($pp) = $ENV{PERL_MM_OPT} =~ /\b PUREPERL_ONLY = (\S+) /xms;
-            if ($pp) {
-                return $want_xs = 0;
+            my($v) = $ENV{PERL_MM_OPT} =~ /\b PUREPERL_ONLY = (\S+) /xms;
+            if (defined $v) {
+                return $want_xs = !$v;
             }
         }
 
