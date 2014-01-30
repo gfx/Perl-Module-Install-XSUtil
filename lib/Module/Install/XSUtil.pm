@@ -17,7 +17,7 @@ use File::Find;
 use constant _VERBOSE => $ENV{MI_VERBOSE} ? 1 : 0;
 
 my %ConfigureRequires = (
-    'ExtUtils::ParseXS' => 2.21,
+    'ExtUtils::ParseXS' => 3.18, # shipped with Perl 5.18.0
 );
 
 my %BuildRequires = (
